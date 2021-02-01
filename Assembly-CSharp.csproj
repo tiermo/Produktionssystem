@@ -118,10 +118,7 @@
     <Compile Include="Assets\Skript\Messen\MessenScript.cs" />
     <Compile Include="Assets\Skript\Messen\tcpServer_Messen.cs" />
     <Compile Include="Assets\Skript\millingArmScript.cs" />
-    <Compile Include="Assets\Skript\Monitoring\ConfigManager.cs" />
     <Compile Include="Assets\Skript\Monitoring\Configuration.cs" />
-    <Compile Include="Assets\Skript\Monitoring\Production.cs" />
-    <Compile Include="Assets\Skript\Monitoring\Reconfiguration.cs" />
     <Compile Include="Assets\Skript\NavMesh_Omni.cs" />
     <Compile Include="Assets\Skript\omniBelt\ConstructorClient_Omni.cs" />
     <Compile Include="Assets\Skript\omniBelt\create_Omni.cs" />

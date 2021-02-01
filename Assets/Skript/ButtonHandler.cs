@@ -11,11 +11,11 @@ public class ButtonHandler : MonoBehaviour
 
     void Start()
     {
-        //mask = 1 << (LayerMask.NameToLayer("Default"));
+        mask = 1 << (LayerMask.NameToLayer("Default"));
     }
     void Update()
     {
-      /*  Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
         {
@@ -32,26 +32,6 @@ public class ButtonHandler : MonoBehaviour
                     GameObject.Find("Bearbeitungsmodul").SetActive(false);
                 }
             }
-        }*/      
-    }
-
-    public void openBMs()
-    {
-        GameObject.Find("Bearbeitungsmodul").SetActive(true);
-    }
-
-    public void closeBMs()
-    {        
-            GameObject.Find("Bearbeitungsmodul").SetActive(false);        
-    }
-
-    public void openLMs()
-    {
-        GameObject.Find("Logistikmodul").SetActive(true);
-    }
-
-    public void closeLMs()
-    {
-        GameObject.Find("Logistikmodul").SetActive(false);
+        }      
     }
 }
