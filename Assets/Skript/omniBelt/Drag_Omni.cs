@@ -35,6 +35,8 @@ public class Drag_Omni : MonoBehaviour
     private int serverPort;           //server port of this modul
     private ModulServerClient msc;
 
+    //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
     void Start()
     {
         //get the name and position of gameobject
@@ -76,6 +78,9 @@ public class Drag_Omni : MonoBehaviour
         ObjScreenSpace = Camera.main.WorldToScreenPoint(trans.position);
         MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, ObjScreenSpace.z);
         Offset = trans.position - Camera.main.ScreenToWorldPoint(MouseScreenSpace);
+
+        GameObject.Find(previousCollidername);
+        ConfigManager.changeConfig("OLM", previousCollidername, ProductionModule.KeinModul, false); // update the current Config 
     }
 
     void OnMouseDrag()
@@ -125,6 +130,9 @@ public class Drag_Omni : MonoBehaviour
             previousposition = trans.position;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
             previousCollidername = Collidername;
+
+            ConfigManager.changeConfig("OLM", previousCollidername, ProductionModule.KeinModul, true); // Update the current Config
+
             x = int.Parse(previousCollidername.Substring(4, 1));
             y = int.Parse(previousCollidername.Substring(5, 1));
             Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
@@ -135,6 +143,8 @@ public class Drag_Omni : MonoBehaviour
         {
             trans.position = previousposition;
             GameObject.Find(previousCollidername).GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("OLM", previousCollidername, ProductionModule.KeinModul, true); // Update the current Config
         }
         GetComponent<MeshRenderer>().material.color = originalColor;
         isDrag = false;

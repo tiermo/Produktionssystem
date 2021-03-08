@@ -10,6 +10,7 @@ public class Create_Bohren : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private GameObject modul; //clone the instance of modul
     private GameObject son;   //son object is arm of drilling machine
     private Color originalcolor;  //save the original color of the gameobject
+    private Color originalcolorSon;
 
     private string localEulerAngles; //in order to change the rotation of modul
 
@@ -21,17 +22,50 @@ public class Create_Bohren : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     private int num = 0; //the number of modul
 
+    private Dropdown dropdown;
+    private string configurationName;
+
+    //private ConfigManager ConfigManager = new ConfigManager();
+
     public void OnBeginDrag(PointerEventData data)
     {
-        modul = Instantiate(Resources.Load("Modul_Bohren")) as GameObject;  //clone Prefab from Folder "Resources"
+        dropdown = GetComponent<Dropdown>();
+        if (dropdown.value == 0)
+        {
+            configurationName = "A";
+            modul = Instantiate(Resources.Load("Modul_BohrenA")) as GameObject;  //clone Prefab from Folder "Resources"
+        }
+        else if (dropdown.value == 1)
+        {
+            configurationName = "B";
+            modul = Instantiate(Resources.Load("Modul_BohrenB")) as GameObject;  //clone Prefab from Folder "Resources"
+        }
+        else if (dropdown.value == 2)
+        {
+            configurationName = "C";
+            modul = Instantiate(Resources.Load("Modul_BohrenC")) as GameObject;  //clone Prefab from Folder "Resources"
+        }
+        else if (dropdown.value == 3)
+        {
+            configurationName = "D";
+            modul = Instantiate(Resources.Load("Modul_BohrenD")) as GameObject;  //clone Prefab from Folder "Resources"
+        }
+        else
+        {
+            configurationName = "E";
+            modul = Instantiate(Resources.Load("Modul_BohrenE")) as GameObject;  //clone Prefab from Folder "Resources"
+        }
+        
         son = modul.transform.Find("Arm").gameObject;
         originalcolor = modul.GetComponent<MeshRenderer>().material.color;
+        originalcolorSon = son.GetComponent<MeshRenderer>().material.color;
         modul.GetComponent<MeshRenderer>().material.color = Color.yellow;
         son.GetComponent<MeshRenderer>().material.color = Color.yellow;
-
+        
         num++;
-        modul.name = "Bohren " + num.ToString();
+        modul.name = "Bohren "+ configurationName +" " +  num.ToString();
         Modulname = modul.name;
+        Debug.Log(Modulname);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -59,6 +93,7 @@ public class Create_Bohren : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             switch (localEulerAngles)
             {
                 case "(270.0, 0.0, 0.0)": //should put on the side of horizontal conveyor
+                   
                     if (int.Parse(Collidername.Substring(6, 1)) % 2 == 0)   //Format is "Modul#2#",get the middle number, it should be even.
                     {
                         modul.GetComponent<MeshRenderer>().material.color = Color.green;
@@ -102,9 +137,13 @@ public class Create_Bohren : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                     modul.transform.position = hit.collider.transform.position - _offset_column;
                     break;
             }
+
             modul.GetComponent<MeshRenderer>().material.color = originalcolor;
-            son.GetComponent<MeshRenderer>().material.color = originalcolor;
+            son.GetComponent<MeshRenderer>().material.color = originalcolorSon;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
+            Debug.Log("Collidername :" + Collidername);
+
+            ConfigManager.changeConfig("PM", Collidername, getModulName(configurationName), true);
 
             modul.AddComponent<Drag_Bohren>();
             modul.GetComponent<ConstructorClient_Bohren>().enabled = true;
@@ -121,6 +160,7 @@ public class Create_Bohren : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     void Start()
     {
         mask = 1 << (LayerMask.NameToLayer("Modul"));
+        
     }
 
     void Update()
@@ -155,5 +195,35 @@ public class Create_Bohren : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public string SendModulName()
     {
         return Modulname;
+    }
+
+   
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="modulName"></param>
+    /// <returns></returns>
+    private ProductionModule getModulName(string modulName)
+    {
+        if (modulName == "A")
+        {
+            return ProductionModule.ModulBohrenA;
+        }
+        else if (modulName == "B")
+        {
+            return ProductionModule.ModulBohrenB;
+        }
+        else if (modulName == "C")
+        {
+            return ProductionModule.ModulBohrenC;
+        }
+        else if (modulName == "D")
+        {
+            return ProductionModule.ModulBohrenD;
+        }
+        else
+        {
+            return ProductionModule.ModulBohrenE;
+        }
     }
 }

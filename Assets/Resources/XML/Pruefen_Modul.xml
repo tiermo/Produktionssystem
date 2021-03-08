@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Modul Name="Pruefen">
+  <Komponente Name="Optischer Sensor" ID="1">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="10" Kosten="2.5">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Ultraschall Sensor" ID="2">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Optisch" ID="3">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="0" Kosten="0">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Ultraschall" ID="4">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="0" Kosten="0">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Modulkonfiguration Name="PruefenA" ID="400" Komponentenliste="1010">
+    <NichtFunktionale_Parameter PStandby="0.2">
+    </NichtFunktionale_Parameter>
+    <Service Name="LochPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="3">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="1">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="FormPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="10">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="1">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+  <Modulkonfiguration Name="PruefenB" ID="401" Komponentenliste="0101">
+    <NichtFunktionale_Parameter PStandby="0.2">
+    </NichtFunktionale_Parameter>
+    <Service Name="LochPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="5">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="0.5">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="FormPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="15">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="0.5">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>   
+</Modul>

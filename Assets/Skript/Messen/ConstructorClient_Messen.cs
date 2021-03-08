@@ -26,7 +26,7 @@ public class ConstructorClient_Messen : MonoBehaviour
     void Start()
     {
         t = transform.Find("Abstandssensor").gameObject;
-        data = GetComponent<Drag_MessenModul>().SendInfo();
+        data = GetComponent<Drag_PruefenModul>().SendInfo();
         ConnectToServer();
         Send(data);
     }

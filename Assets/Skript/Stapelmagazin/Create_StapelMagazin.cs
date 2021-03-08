@@ -20,6 +20,8 @@ public class Create_StapelMagazin : MonoBehaviour, IBeginDragHandler, IDragHandl
 
     private int num = 0; //the number of modul
 
+    //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
     public void OnBeginDrag(PointerEventData data)
     {
         modul = Instantiate(Resources.Load("Modul_StapelMagazin")) as GameObject;  //clone Prefab from Folder "Resources"
@@ -96,6 +98,8 @@ public class Create_StapelMagazin : MonoBehaviour, IBeginDragHandler, IDragHandl
             }
             modul.GetComponent<MeshRenderer>().material.color = originalcolor;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("PM", Collidername, ProductionModule.ModulStapelMagazin, true); // Update the current Config
 
             modul.AddComponent<Drag_StapelMagazin>();
             modul.GetComponent<ConstructorClient_StapelMagazin>().enabled = true;

@@ -14,6 +14,7 @@ public class Drag_Stanzen : MonoBehaviour
     private Transform trans;             //get gameobject's transform
     private GameObject son;              //son object is arm of Stanzmachine
     private Color originalColor;         //save the original color of the gameobject
+    private Color originalColorSon;
 
     private bool isDrag = false;         //flag if is dragging
 
@@ -35,6 +36,8 @@ public class Drag_Stanzen : MonoBehaviour
 
     private string localEulerAngles;     //in order to change the rotation of conveyor belt
     RaycastHit hit;
+
+   // private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
 
     private int serverPort;
     private ModulServerClient msc;
@@ -60,6 +63,7 @@ public class Drag_Stanzen : MonoBehaviour
 
         trans = GetComponent<Transform>();
         son = transform.Find("Arm").gameObject;
+        originalColorSon = son.GetComponent<MeshRenderer>().material.color;
         previousposition = trans.position;
         mask = 1 << (LayerMask.NameToLayer("Modul"));
     }
@@ -78,7 +82,7 @@ public class Drag_Stanzen : MonoBehaviour
         if (!isDrag)
         {
             GetComponent<MeshRenderer>().material.color = originalColor;
-            son.GetComponent<MeshRenderer>().material.color = originalColor;
+            son.GetComponent<MeshRenderer>().material.color = originalColorSon;
         }
     }
 
@@ -90,6 +94,9 @@ public class Drag_Stanzen : MonoBehaviour
         ObjScreenSpace = Camera.main.WorldToScreenPoint(trans.position);
         MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, ObjScreenSpace.z);
         Offset = trans.position - Camera.main.ScreenToWorldPoint(MouseScreenSpace);
+
+        GameObject.Find(previousCollidername);
+        ConfigManager.changeConfig("PM", previousCollidername, ProductionModule.KeinModul, true); // update the current Config 
     }
 
     void OnMouseDrag()
@@ -188,6 +195,9 @@ public class Drag_Stanzen : MonoBehaviour
             previousposition = trans.position;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
             previousCollidername = Collidername;
+
+            ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true); // Update the current Config
+
             if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
             {
                 x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
@@ -208,9 +218,11 @@ public class Drag_Stanzen : MonoBehaviour
         {
             trans.position = previousposition;
             GameObject.Find(previousCollidername).GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true); // Update the current Config
         }
         GetComponent<MeshRenderer>().material.color = originalColor;
-        son.GetComponent<MeshRenderer>().material.color = originalColor;
+        son.GetComponent<MeshRenderer>().material.color = originalColorSon;
         isDrag = false;
     }
 
@@ -251,6 +263,23 @@ public class Drag_Stanzen : MonoBehaviour
                 Debug.Log("Socket error : " + e.Message);
             }
         }
+    }
+
+    private ProductionModule getModulName(string modulName)
+    {
+        string[] nameSplit;
+        nameSplit = modulName.Split(" "[0]);
+
+        if (nameSplit[1] == "A")
+        {
+            return ProductionModule.ModulStanzenA;
+        }
+        else 
+        {
+            return ProductionModule.ModulStanzenB;
+        }
+        
+
     }
 
 }

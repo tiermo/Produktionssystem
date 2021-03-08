@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Modul Name="Logistik">
+  <Modulkonfiguration Name="Logistikmodul" ID="50" Komponentenliste="">
+    <NichtFunktionale_Parameter PStandby="0.01">
+    </NichtFunktionale_Parameter>
+    <Service Name="Transport">
+      <NichtFunktionale_Parameter Name="TService" Formel="l/(1.5*n/60)">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="0.0524*n">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+</Modul>

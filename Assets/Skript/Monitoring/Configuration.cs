@@ -12,27 +12,31 @@ public enum ProductionModule
     ModulBohrenA = 200,
     ModulBohrenB= 201,
     ModulBohrenC = 202,
+    ModulBohrenD = 203,
+    ModulBohrenE = 204,
     ModulFraesenA = 300,
     ModulFraesenB = 301,
     ModulFraesenC = 302,
-    ModulMessen = 400,
-    ModulErkennen = 500,
+    ModulPruefenA = 400,
+    ModulPruefenB = 401,
+    ModulLackierenA = 500,
+    ModulLackierenB = 501,
     ModulStanzenA = 600,
     ModulStanzenB = 601,
     ModulStanzenC = 602,
     ModulBohrenFraesenA = 700,
     ModulBohrenFraesenB = 701,
-    ModulBohrenFraesenC = 702,
-    ModulStanzenMessenA = 800,
-    ModulStanzenMessenB = 801,
-    ModulStanzenMessenC = 802,
+    ModulStanzenPruefenA = 800,
+    ModulStanzenPruefenB = 801,
+    ModulStanzenPruefenC = 802,
+    ModulStanzenPruefenD = 803,
     ModulSenke = 900
 }
 
-public class Configuration : MonoBehaviour {
+public class Configuration  {
     private bool[] biDirectionalLMs = new bool[15];
     private bool[] omniDirectionalLMs = new bool[14];
-    private ProductionModule[] productionModules = new ProductionModule[13];
+    private ProductionModule[] productionModules = new ProductionModule[14];
 
     // Use this for initialization
     void Start () {
@@ -73,6 +77,15 @@ public class Configuration : MonoBehaviour {
     public bool[] getOmniDirectionalLMs()
     {
         return omniDirectionalLMs;
+    }
+
+    public Configuration copy()
+    {
+        Configuration copy = new Configuration();
+        copy.biDirectionalLMs = (bool[])this.biDirectionalLMs.Clone();
+        copy.omniDirectionalLMs = (bool[])this.omniDirectionalLMs.Clone();
+        copy.productionModules = (ProductionModule[])this.productionModules.Clone();
+        return copy;
     }
 
 

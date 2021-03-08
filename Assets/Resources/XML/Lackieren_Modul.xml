@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Modul Name="Lackieren">
+  <Komponente Name="Farbpalette 1" ID="1">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Farbpalette 2" ID="2">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Lackieren" ID="3">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="0" Kosten="0">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Modulkonfiguration Name="LackierenA" ID="500" Komponentenliste="101">
+    <NichtFunktionale_Parameter PStandby="1">
+    </NichtFunktionale_Parameter>
+    <Service Name="LackierenSlow">
+      <NichtFunktionale_Parameter Name="TService" Formel="45">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="1.5">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="LackierenFast">
+      <NichtFunktionale_Parameter Name="TService" Formel="30">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="3.0">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+  <Modulkonfiguration Name="LackierenB" ID="501" Komponentenliste="011">
+    <NichtFunktionale_Parameter PStandby="1">
+    </NichtFunktionale_Parameter>
+    <Service Name="LackierenSlow">
+      <NichtFunktionale_Parameter Name="TService" Formel="45">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="1.5">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="LackierenFast">
+      <NichtFunktionale_Parameter Name="TService" Formel="30">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="3.0">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>   
+</Modul>

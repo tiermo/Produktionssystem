@@ -1,45 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime;
 using UnityEngine;
+using System.Threading;
 
-public class Reconfiguration : MonoBehaviour
+public class Reconfiguration 
 {
 
     private int time;
     private int costs;
     private int energy;
-    private Configuration startConfig = new Configuration();
-    private Configuration finalConfig = new Configuration();
+    private Configuration configOne = new Configuration();
+    private Configuration configTwo = new Configuration();
+    private GameObject test = new GameObject();
+    private XMLReader xmlReader = new XMLReader();
+    
     private int removedPMs;
     private int addedPMs;
-    private int configuratedPMs;
+    private int timeForConfiguratedPMs;
     private int differentLMs;
 
-    // Use this for initialization
-    void Start()
-    {
+    private ToggleReader toggleTime;
+    private ToggleReader toggleCosts;
+    private ToggleReader toggleEnergy;
 
+
+
+    public void startReconfiguration(Configuration Config)
+    {
+        toggleTime = GameObject.Find("Checkbox-Zeit").GetComponent<ToggleReader>();
+        toggleCosts = GameObject.Find("Checkbox-Kosten").GetComponent<ToggleReader>();
+        toggleEnergy = GameObject.Find("Checkbox-Energie").GetComponent<ToggleReader>();
+        
+
+        configOne = Config;
+     
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void startReconfiguration(Configuration config)
-    {
-        startConfig = config;
-    }
 
     public void endReconfiguration(Configuration config)
     {
-        finalConfig = config;
+        
+        configTwo = config;
+        compareConfig();
     }
 
     private int calculateTime()
     {
-        time = addedPMs * 60 + removedPMs * 30 + configuratedPMs * 15 + differentLMs * 45;
+        time = addedPMs * 60 + removedPMs * 30 + timeForConfiguratedPMs + differentLMs *45;
         //Calculate the Reconfiguration Time here
         return time;
     }
@@ -59,18 +67,20 @@ public class Reconfiguration : MonoBehaviour
 
     /// <summary>
     /// Compares startConfig with finalConfig, 
-    /// writes the differences in removedPMs, addedPms, configuredPMs and differentLMs.
+    /// writes the differences in removedPMs, addedPms, timeForConfiguratedPMs and differentLMs.
     /// </summary>
     private void compareConfig()
     {
         removedPMs = 0;
         addedPMs = 0;
-        configuratedPMs = 0;
+        timeForConfiguratedPMs = 0;
         differentLMs = 0;
-
-        compareProductionModules();
+        
+        timeForConfiguratedPMs = compareProductionModules();
         compareLogistikModules("OLM");
         compareLogistikModules("BLM");
+        displayValues();
+        
     }
 
     /// <summary>
@@ -86,13 +96,14 @@ public class Reconfiguration : MonoBehaviour
 
         if ( typeOfLM == "BLM")
         {
-            startLMs = startConfig.getBiDirectionalLMs();
-            finalLMs = finalConfig.getBiDirectionalLMs();
+            startLMs = configOne.getBiDirectionalLMs();
+            finalLMs = configTwo.getBiDirectionalLMs();
+           
         }
         else
         {
-            startLMs = startConfig.getOmniDirectionalLMs();
-            finalLMs = finalConfig.getOmniDirectionalLMs();
+            startLMs = configOne.getOmniDirectionalLMs();
+            finalLMs = configTwo.getOmniDirectionalLMs();
         }
 
         for (int i = 0; i < startLMs.Length; i++)
@@ -108,11 +119,11 @@ public class Reconfiguration : MonoBehaviour
     /// <summary>
     /// Compares arrays of production modules of the given configurations
     /// </summary>
-    private void compareProductionModules()
+    private int compareProductionModules()
     {
-        ProductionModule[] startModules = startConfig.getProductionModules();
-        ProductionModule[] finalModules = finalConfig.getProductionModules();
-
+        ProductionModule[] startModules = configOne.getProductionModules();
+        ProductionModule[] finalModules = configTwo.getProductionModules();
+        int installTime = 0;
 
         for (int i = 0; i < 13; i++)
         {
@@ -131,7 +142,8 @@ public class Reconfiguration : MonoBehaviour
             }
             else if (d != 0 && -10 < d && d < 10)
             {
-                configuratedPMs++;
+                xmlReader.loadXml(getTypeOfModule(startModules[i]));          
+                installTime += compareSingleModules(startModules[i], finalModules[i]);
             }
             else if (d != 0 && d >= 10 && d <= -10)
             {
@@ -139,6 +151,113 @@ public class Reconfiguration : MonoBehaviour
                 removedPMs++;
             }
         }
+        return installTime;
+    }
+
+    private int compareSingleModules( ProductionModule startModule, ProductionModule finalModule)
+    {
+        string componentList1 = xmlReader.getComponentList((int)startModule);
+        string componentList2 = xmlReader.getComponentList((int)finalModule);
+        return compareComponentLists(componentList1, componentList2);
+    }
+
+    private int compareComponentLists(string componentList1,string componentList2 )
+    {
+        char[] list1;
+        char[] list2;
+        list1 = componentList1.ToCharArray(0, componentList1.Length);
+        list2 = componentList2.ToCharArray(0, componentList2.Length);
+        int installTime = 0;
+        string value;
+        for (int i =0; i<list1.Length; i++)
+        {
+            if (list1[i] != list2[i])
+            {
+                if (list1[i] == '0')
+                {
+                    value = xmlReader.getComponentValue(i+1, "inst", "zeit");
+                }
+                else
+                {
+                    value = xmlReader.getComponentValue(i+1, "deinst", "zeit");
+                }
+                installTime += System.Convert.ToInt32(value);                
+            }
+        }
+        return installTime;
+    }
+
+    private string getTypeOfModule(ProductionModule module)
+    {
+        if ((module == ProductionModule.ModulBohrenA) || (module == ProductionModule.ModulBohrenB) || 
+            (module == ProductionModule.ModulBohrenC) || (module == ProductionModule.ModulBohrenD) || 
+            (module == ProductionModule.ModulBohrenE) )
+        {
+            return "Bohren_Modul";
+        } else if (module == ProductionModule.ModulSenke)
+        {
+            return "";
+        } else if(module == ProductionModule.ModulStapelMagazin)
+        {
+            return "";
+        } else if(module == ProductionModule.ModulFraesenA || module == ProductionModule.ModulFraesenB || module == ProductionModule.ModulFraesenC)
+        {
+            return "Fraesen_Modul";
+        } else if(module == ProductionModule.ModulPruefenA || module == ProductionModule.ModulPruefenB)
+        {
+            return "Pruefen_Modul";
+        } else if (module == ProductionModule.ModulLackierenA || module == ProductionModule.ModulLackierenB)
+        {
+            return "Lackieren_Modul";
+        } else if (module == ProductionModule.ModulStanzenA || module == ProductionModule.ModulStanzenB || module == ProductionModule.ModulStanzenC)
+        {
+            return "Stanzen_Modul";
+        } else if (module == ProductionModule.ModulBohrenFraesenA || module == ProductionModule.ModulBohrenFraesenB )
+        {
+            return "BohrenFraesen_Modul";
+        }else if (module == ProductionModule.ModulStanzenPruefenA || module == ProductionModule.ModulStanzenPruefenB || module == ProductionModule.ModulStanzenPruefenC || module == ProductionModule.ModulStanzenPruefenD)
+        {
+            return "Stanzen_Pruefen_Modul";
+        }
+        else
+        {
+            return "Logistik_Modul";
+        }
+            
+    }
+
+    private void displayValues()
+    {
+        DisplayTime displayTime = GameObject.Find("Zeit").GetComponent<DisplayTime>();
+        DisplayCosts displayCosts = GameObject.Find("Kosten").GetComponent<DisplayCosts>();
+        DisplayEnergy displayEnergy = GameObject.Find("Energie").GetComponent<DisplayEnergy>();
+
+        if (toggleTime.getToggleValueTime())
+        {
+            displayTime.displayTime(calculateTime());
+        }
+        else
+        {
+            displayTime.deleteTimeText();
+        }
+        if (toggleCosts.getToggleValueCosts())
+        {
+            displayCosts.displayCosts(calculateCosts());
+        }
+        else
+        {
+            displayCosts.deleteCostsText();
+        }
+        if (toggleEnergy.getToggleValueEnergy())
+        {
+            displayEnergy.displayEnergy(calculateEnergy());
+        }
+        else
+        {
+            displayEnergy.deleteEnergyText();
+        }
+
+
     }
 
 }

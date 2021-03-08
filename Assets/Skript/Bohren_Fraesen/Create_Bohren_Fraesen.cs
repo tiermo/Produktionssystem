@@ -10,6 +10,7 @@ public class Create_Bohren_Fraesen : MonoBehaviour, IBeginDragHandler, IDragHand
     private GameObject modul; //clone the instance of modul
     private GameObject son;   //son object is arm of milling machine
     private Color originalcolor;  //save the original color of the gameobject
+    private Color originalcolorSon;
 
     private string localEulerAngles; //in order to change the rotation of modul
 
@@ -21,16 +22,35 @@ public class Create_Bohren_Fraesen : MonoBehaviour, IBeginDragHandler, IDragHand
 
     private int num = 0; //the number of modul
 
+    private Dropdown dropdown;
+    private string configurationName;
+
+    //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
+    
+
     public void OnBeginDrag(PointerEventData data)
     {
-        modul = Instantiate(Resources.Load("Modul_Bohren_Fraesen")) as GameObject;  //clone Prefab from Folder "Resources"
+        dropdown = GetComponent<Dropdown>();
+        if (dropdown.value == 0)
+        {
+            configurationName = "A";
+            modul = Instantiate(Resources.Load("Modul_Bohren_FraesenA")) as GameObject;  //clone Prefab from Folder "Resources"
+        }
+        else
+        {
+            configurationName = "B";
+            modul = Instantiate(Resources.Load("Modul_Bohren_FraesenB")) as GameObject;  //clone Prefab from Folder "Resources"
+        }
+
         son = modul.transform.Find("Arm").gameObject;
         originalcolor = modul.GetComponent<MeshRenderer>().material.color;
+        originalcolorSon = son.GetComponent<MeshRenderer>().material.color;
         modul.GetComponent<MeshRenderer>().material.color = Color.yellow;
         son.GetComponent<MeshRenderer>().material.color = Color.yellow;
 
         num++;
-        modul.name = "Bohren_Fraesen " + num.ToString();
+        modul.name = "Bohren_Fraesen " + configurationName + " " + num.ToString();
         Modulname = modul.name;
     }
 
@@ -103,8 +123,10 @@ public class Create_Bohren_Fraesen : MonoBehaviour, IBeginDragHandler, IDragHand
                     break;
             }
             modul.GetComponent<MeshRenderer>().material.color = originalcolor;
-            son.GetComponent<MeshRenderer>().material.color = originalcolor;
+            son.GetComponent<MeshRenderer>().material.color = originalcolorSon;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("PM", Collidername, getModulName(configurationName), true); // Update the current Config
 
             modul.AddComponent<Drag_Bohren_Fraesen>();
             modul.GetComponent<ConstructorClient_Bohren_Fraesen>().enabled = true;
@@ -155,5 +177,22 @@ public class Create_Bohren_Fraesen : MonoBehaviour, IBeginDragHandler, IDragHand
     public string SendModulName()
     {
         return Modulname;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="modulName"></param>
+    /// <returns></returns>
+    private ProductionModule getModulName(string modulName)
+    {
+        if (modulName == "A")
+        {
+            return ProductionModule.ModulBohrenFraesenA;
+        }
+        else
+        {
+            return ProductionModule.ModulBohrenFraesenB;
+        }
     }
 }

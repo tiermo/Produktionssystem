@@ -36,6 +36,8 @@ public class Drag_Conveyor : MonoBehaviour
     private string localEulerAngles; //in order to change the rotation of conveyor belt
     RaycastHit hit;
 
+    //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
     private int serverPort;
     private ModulServerClient msc;
 
@@ -91,6 +93,9 @@ public class Drag_Conveyor : MonoBehaviour
         //Debug.Log("ObjScreenSpace" + ObjScreenSpace.z);
         Offset = trans.position - Camera.main.ScreenToWorldPoint(MouseScreenSpace);
         //Debug.Log("offset" + Offset);
+
+        GameObject.Find(previousCollidername);
+        ConfigManager.changeConfig("BLM", previousCollidername, ProductionModule.KeinModul, false); // update the current Config 
     }
 
     void OnMouseDrag()
@@ -194,6 +199,9 @@ public class Drag_Conveyor : MonoBehaviour
             previousposition = trans.position;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
             previousCollidername = Collidername;
+
+            ConfigManager.changeConfig("BLM", previousCollidername, ProductionModule.KeinModul, true); // Update the current Config
+
             x = int.Parse(previousCollidername.Substring(8, 1));
             y = int.Parse(previousCollidername.Substring(9, 1));
             Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
@@ -206,6 +214,8 @@ public class Drag_Conveyor : MonoBehaviour
         {
             trans.position = previousposition;
             GameObject.Find(previousCollidername).GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("BLM", previousCollidername, ProductionModule.KeinModul, true); // Update the current Config
         }
         GetComponent<MeshRenderer>().material.color = originalColor;
         isDrag = false;

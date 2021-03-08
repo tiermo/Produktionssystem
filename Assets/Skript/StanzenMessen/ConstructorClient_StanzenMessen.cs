@@ -29,7 +29,7 @@ public class ConstructorClient_StanzenMessen : MonoBehaviour
     {
         t = transform.Find("Arm").gameObject;
         s = transform.Find("Abstandssensor").gameObject;
-        data = GetComponent<Drag_StanzenMessen>().SendInfo();
+        data = GetComponent<Drag_StanzenPruefen>().SendInfo();
         ConnectToServer();
         Send(data);
     }

@@ -1,0 +1,289 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+using System.Net;
+using System.Net.Sockets;
+using System.IO;
+using System.Text;
+using System;
+
+public class Drag_StanzenPruefen : MonoBehaviour
+{
+
+    private Transform trans;             //get gameobject's transform
+    private GameObject son;              //son object is arm of Stanzmachine
+    private Color originalColor;         //save the original color of the gameobject
+    private Color originalColorSon;
+
+    private bool isDrag = false;         //flag if is dragging
+
+    private Vector3 ObjScreenSpace;      //gameobject's screenposition
+    private Vector3 ObjWorldSpace;       //gameobject's worldposition
+    private Vector3 MouseScreenSpace;    //mouse's screenposition
+    private Vector3 Offset;              //offset between screen space and world space
+
+    private Vector3 previousposition;    //save the previous position of gameobject
+    private float x;                       //position x of modul
+    private float y;                       //position y of modul
+    private string Infostring;
+    private string Positionstring;
+
+    private string Modulname;            //the name of modul
+    private string previousCollidername;
+    private string Collidername;         //the name of colider
+    private LayerMask mask;              //Calculate the number of "Modul" layermask
+
+    private string localEulerAngles;     //in order to change the rotation of conveyor belt
+    RaycastHit hit;
+
+    //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
+    private int serverPort;
+    private ModulServerClient msc;
+
+    void Start()
+    {
+        //get the name and position of gameobject
+        previousCollidername = GameObject.Find("Stanzen/Pruefen").GetComponent<create_StanzenPruefen>().SendColliderName();
+        if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+        {
+            x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
+            y = float.Parse(previousCollidername.Substring(7, 1));
+
+        }
+        else
+        {
+            x = float.Parse(previousCollidername.Substring(5, 1));
+            y = float.Parse(previousCollidername.Substring(6, 1)) / float.Parse(previousCollidername.Substring(7, 1));
+        }
+
+        Modulname = GameObject.Find("Stanzen/Pruefen").GetComponent<create_StanzenPruefen>().SendModulName();
+        originalColor = GetComponent<MeshRenderer>().material.color;
+
+        trans = GetComponent<Transform>();
+        son = transform.Find("Arm").gameObject;
+        originalColorSon = son.GetComponent<MeshRenderer>().material.color;
+        previousposition = trans.position;
+        mask = 1 << (LayerMask.NameToLayer("Modul"));
+    }
+
+    void OnMouseEnter()
+    {
+        if (!isDrag)
+        {
+            GetComponent<MeshRenderer>().material.color = Color.yellow;
+            son.GetComponent<MeshRenderer>().material.color = Color.yellow;
+        }
+    }
+
+    void OnMouseExit()
+    {
+        if (!isDrag)
+        {
+            GetComponent<MeshRenderer>().material.color = originalColor;
+            son.GetComponent<MeshRenderer>().material.color = originalColorSon;
+        }
+    }
+
+    void OnMouseDown()
+    {
+        GetComponent<MeshRenderer>().material.color = Color.yellow;
+        son.GetComponent<MeshRenderer>().material.color = Color.yellow;
+
+        ObjScreenSpace = Camera.main.WorldToScreenPoint(trans.position);
+        MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, ObjScreenSpace.z);
+        Offset = trans.position - Camera.main.ScreenToWorldPoint(MouseScreenSpace);
+
+        GameObject.Find(previousCollidername);
+        ConfigManager.changeConfig("PM", previousCollidername, ProductionModule.KeinModul, true); // update the current Config 
+    }
+
+    void OnMouseDrag()
+    {
+        isDrag = true;
+        GetComponent<MeshRenderer>().material.color = Color.yellow;
+        son.GetComponent<MeshRenderer>().material.color = Color.yellow;
+        GameObject.Find(previousCollidername).GetComponent<BoxCollider>().enabled = true;
+
+        //gameobject moves with mouse
+        MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, ObjScreenSpace.z);
+        ObjWorldSpace = Camera.main.ScreenToWorldPoint(MouseScreenSpace) + Offset;
+        if (ObjWorldSpace.y > 7.72f == false)
+        {
+            ObjWorldSpace.y = 8f;
+        }
+        trans.position = ObjWorldSpace;
+
+        //change the rotation of gameobject
+        localEulerAngles = trans.localEulerAngles.ToString();
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            switch (localEulerAngles)
+            {
+                case "(270.0, 0.0, 0.0)":
+                    trans.rotation = Quaternion.Euler(new Vector3(270, 270, 0));
+                    break;
+                case "(270.0, 270.0, 0.0)":
+                    trans.rotation = Quaternion.Euler(new Vector3(270, 0, 0));
+                    break;
+                default:
+                    trans.rotation = Quaternion.Euler(new Vector3(270, 270, 0));
+                    break;
+            }
+        }
+
+        //delete modul 
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            serverPort = GetComponent<ConstructorClient_StanzenMessen>().getServerPortNr();
+            msc = new ModulServerClient(serverPort, "deleted");
+            Destroy(trans.gameObject);
+        }
+
+        //show the place that gameobject can be placed
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
+        {
+            Collidername = hit.collider.name;
+            switch (localEulerAngles)
+            {
+                case "(270.0, 0.0, 0.0)": //should put on the side of horizontal conveyor
+                    if (int.Parse(Collidername.Substring(6, 1)) % 2 == 0)   //Format is "Modul#2#",get the middle number, it should be even.
+                    {
+                        GetComponent<MeshRenderer>().material.color = Color.green;
+                        son.GetComponent<MeshRenderer>().material.color = Color.green;
+                    }
+                    else
+                    {
+                        GetComponent<MeshRenderer>().material.color = Color.yellow;
+                        son.GetComponent<MeshRenderer>().material.color = Color.yellow;
+                    }
+                    break;
+                case "(270.0, 270.0, 0.0)": //should put on the side of vertical conveyor
+                    if (int.Parse(Collidername.Substring(6, 1)) % 2 != 0)   //Format is "Modul#1/3/5#",get the middle number, it should be odd number.
+                    {
+                        GetComponent<MeshRenderer>().material.color = Color.green;
+                        son.GetComponent<MeshRenderer>().material.color = Color.green;
+                    }
+                    else
+                    {
+                        GetComponent<MeshRenderer>().material.color = Color.yellow;
+                        son.GetComponent<MeshRenderer>().material.color = Color.yellow;
+                    }
+                    break;
+            }
+        }
+    }
+
+    void OnMouseUp()
+    {
+        if (GetComponent<MeshRenderer>().material.color == Color.green)
+        {
+            switch (localEulerAngles)
+            {
+                case "(270.0, 0.0, 0.0)":
+                    Vector3 _offset_row = new Vector3(11.58f, -7.72f, 1.56f);
+                    trans.position = hit.collider.transform.position - _offset_row;
+                    break;
+                case "(270.0, 270.0, 0.0)":
+                    Vector3 _offset_column = new Vector3(-1.32f, -7.72f, 11.42f);
+                    trans.position = hit.collider.transform.position - _offset_column;
+                    break;
+            }
+            previousposition = trans.position;
+            hit.collider.GetComponent<BoxCollider>().enabled = false;
+            previousCollidername = Collidername;
+
+            ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true); // Update the current Config
+
+            if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+            {
+                x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
+                y = float.Parse(previousCollidername.Substring(7, 1));
+
+            }
+            else
+            {
+                x = float.Parse(previousCollidername.Substring(5, 1));
+                y = float.Parse(previousCollidername.Substring(6, 1)) / float.Parse(previousCollidername.Substring(7, 1));
+            }
+
+            Positionstring = "Position: x=" + x.ToString("0.0") + ", y=" + y.ToString("0.0");
+            serverPort = GetComponent<ConstructorClient_StanzenMessen>().getServerPortNr();
+            msc = new ModulServerClient(serverPort, Positionstring);
+        }
+        else
+        {
+            trans.position = previousposition;
+            GameObject.Find(previousCollidername).GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true); // Update the current Config
+        }
+        GetComponent<MeshRenderer>().material.color = originalColor;
+        son.GetComponent<MeshRenderer>().material.color = originalColorSon;
+        isDrag = false;
+    }
+
+
+    public string SendInfo()
+    {
+        Infostring = "%" + Modulname + "/" + x + "/" + y;
+        return Infostring;
+    }
+    public string ReturnPosition()
+    {
+        return Positionstring;
+    }
+
+    private class ModulServerClient
+    {
+        private TcpClient socket;
+        private NetworkStream stream;
+        private StreamWriter writer;
+        private string host = "127.0.0.1";
+
+        public ModulServerClient(int port, string data)
+        {
+            Debug.Log("client port" + port);
+            try
+            {
+                socket = new TcpClient(host, port);
+                stream = socket.GetStream();
+                writer = new StreamWriter(stream);
+                writer.WriteLine(data);
+                writer.Flush();
+                socket.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Socket error : " + e.Message);
+            }
+        }
+    }
+
+    private ProductionModule getModulName(string modulName)
+    {
+        string[] nameSplit;
+        nameSplit = modulName.Split(" "[0]);
+
+        if (nameSplit[1] == "A")
+        {
+            return ProductionModule.ModulStanzenPruefenA;
+        }
+        else if(nameSplit[1] == "B")
+        {
+            return ProductionModule.ModulStanzenPruefenB;
+        }
+        else if (nameSplit[1] == "C")
+        {
+            return ProductionModule.ModulStanzenPruefenC;
+        }
+        else
+        {
+            return ProductionModule.ModulStanzenPruefenD;
+        }
+    }
+
+}

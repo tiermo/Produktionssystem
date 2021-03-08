@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
@@ -14,6 +15,7 @@ public class Drag_Bohren : MonoBehaviour
     private Transform trans;             //get gameobject's transform
     private GameObject son;              //son object is arm of drilling machine
     private Color originalColor;         //save the original color of the gameobject
+    private Color originalColorSon;
 
     private bool isDrag = false;         //flag if is dragging
 
@@ -39,6 +41,8 @@ public class Drag_Bohren : MonoBehaviour
     private int serverPort;
     private ModulServerClient msc;
 
+    //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
     void Start()
     {
         //get the name and position of gameobject
@@ -57,9 +61,11 @@ public class Drag_Bohren : MonoBehaviour
 
         Modulname = GameObject.Find("Bohren").GetComponent<Create_Bohren>().SendModulName();
         originalColor = GetComponent<MeshRenderer>().material.color;
+        
 
         trans = GetComponent<Transform>();
         son = transform.Find("Arm").gameObject;
+        originalColorSon = son.GetComponent<MeshRenderer>().material.color;
         previousposition = trans.position;
         mask = 1 << (LayerMask.NameToLayer("Modul"));
     }
@@ -78,7 +84,7 @@ public class Drag_Bohren : MonoBehaviour
         if (!isDrag)
         {
             GetComponent<MeshRenderer>().material.color = originalColor;
-            son.GetComponent<MeshRenderer>().material.color = originalColor;
+            son.GetComponent<MeshRenderer>().material.color = originalColorSon;
         }
     }
 
@@ -90,6 +96,10 @@ public class Drag_Bohren : MonoBehaviour
         ObjScreenSpace = Camera.main.WorldToScreenPoint(trans.position);
         MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, ObjScreenSpace.z);
         Offset = trans.position - Camera.main.ScreenToWorldPoint(MouseScreenSpace);
+        GameObject.Find(previousCollidername);
+        
+        ConfigManager.changeConfig("PM", previousCollidername, ProductionModule.KeinModul, true); // update the current Config 
+
     }
 
     void OnMouseDrag()
@@ -98,6 +108,7 @@ public class Drag_Bohren : MonoBehaviour
         GetComponent<MeshRenderer>().material.color = Color.yellow;
         son.GetComponent<MeshRenderer>().material.color = Color.yellow;
         GameObject.Find(previousCollidername).GetComponent<BoxCollider>().enabled = true;
+        
 
         //gameobject moves with mouse
         MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, ObjScreenSpace.z);
@@ -188,6 +199,12 @@ public class Drag_Bohren : MonoBehaviour
             previousposition = trans.position;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
             previousCollidername = Collidername;
+
+            Debug.Log("hallo");
+            Debug.Log(Modulname);
+            Debug.Log(getModulName(Modulname));
+            ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true); // Update the current Config
+
             if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
             {
                 x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
@@ -208,9 +225,13 @@ public class Drag_Bohren : MonoBehaviour
         {
             trans.position = previousposition;
             GameObject.Find(previousCollidername).GetComponent<BoxCollider>().enabled = false;
+            Debug.Log("hallo");
+            Debug.Log(Modulname);
+            Debug.Log(getModulName(Modulname));
+            ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true);
         }
         GetComponent<MeshRenderer>().material.color = originalColor;
-        son.GetComponent<MeshRenderer>().material.color = originalColor;
+        son.GetComponent<MeshRenderer>().material.color = originalColorSon;
         isDrag = false;
     }
 
@@ -250,6 +271,33 @@ public class Drag_Bohren : MonoBehaviour
             {
                 Debug.Log("Socket error : " + e.Message);
             }
+        }
+    }
+
+    private ProductionModule getModulName(string modulName)
+    {
+        string[] nameSplit;
+        nameSplit = modulName.Split(" "[0]);
+
+        if (nameSplit[1] == "A")
+        {
+            return ProductionModule.ModulBohrenA;
+        }
+        else if (nameSplit[1] == "B")
+        {
+            return ProductionModule.ModulBohrenB;
+        }
+        else if (nameSplit[1] == "C")
+        {
+            return ProductionModule.ModulBohrenC;
+        }
+        else if (nameSplit[1] == "D")
+        {
+            return ProductionModule.ModulBohrenD;
+        }
+        else
+        {
+            return ProductionModule.ModulBohrenE;
         }
     }
 

@@ -10,6 +10,7 @@ public class create_Stanzen : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     private GameObject modul; //clone the instance of modul
     private GameObject son;   //son object is arm of Stanzmachine
     private Color originalcolor;  //save the original color of the gameobject
+    private Color originalcolorSon;
 
     private string localEulerAngles; //in order to change the rotation of modul
 
@@ -21,16 +22,35 @@ public class create_Stanzen : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
 
     private int num = 0; //the number of modul
 
+    private Dropdown dropdown;
+    private string configurationName;
+
+    //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
     public void OnBeginDrag(PointerEventData data)
     {
-        modul = Instantiate(Resources.Load("Modul_Stanzen")) as GameObject;  //clone Prefab from Folder "Resources"
+        dropdown = GetComponent<Dropdown>();
+        if (dropdown.value == 0)
+        {
+            configurationName = "A";
+            modul = Instantiate(Resources.Load("Modul_StanzenA")) as GameObject;  //clone Prefab from Folder "Resources"
+        }
+        else 
+        {
+            configurationName = "B";
+            modul = Instantiate(Resources.Load("Modul_StanzenB")) as GameObject;  //clone Prefab from Folder "Resources"
+        }
+       
+
         son = modul.transform.Find("Arm").gameObject;
         originalcolor = modul.GetComponent<MeshRenderer>().material.color;
+        originalcolorSon = son.GetComponent<MeshRenderer>().material.color;
+
         modul.GetComponent<MeshRenderer>().material.color = Color.yellow;
         son.GetComponent<MeshRenderer>().material.color = Color.yellow;
 
         num++;
-        modul.name = "Stanzen " + num.ToString();
+        modul.name = "Stanzen " + configurationName + " " + num.ToString();
         Modulname = modul.name;
     }
 
@@ -103,8 +123,10 @@ public class create_Stanzen : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
                     break;
             }
             modul.GetComponent<MeshRenderer>().material.color = originalcolor;
-            son.GetComponent<MeshRenderer>().material.color = originalcolor;
+            son.GetComponent<MeshRenderer>().material.color = originalcolorSon;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("PM", Collidername, getModulName(configurationName), true); // Update the current Config
 
             modul.AddComponent<Drag_Stanzen>();
             modul.GetComponent<ConstructorClient_Stanzen>().enabled = true;
@@ -155,5 +177,22 @@ public class create_Stanzen : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     public string SendModulName()
     {
         return Modulname;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="modulName"></param>
+    /// <returns></returns>
+    private ProductionModule getModulName(string modulName)
+    {
+        if (modulName == "A")
+        {
+            return ProductionModule.ModulStanzenA;
+        }
+        else 
+        {
+            return ProductionModule.ModulStanzenB;
+        }
     }
 }

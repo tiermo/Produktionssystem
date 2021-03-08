@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Modul Name="Stanzen">
+  <Komponente Name="Stanzkopf Logo" ID="1">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Stanzkopf Bohrloch" ID="2">
+    <Installationsaufwände Zeit="5" Kosten="1.25">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Normal Stanzen" ID="3">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="0" Kosten="0">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Modulkonfiguration Name="StanzenA" ID="600" Komponentenliste="101">
+    <NichtFunktionale_Parameter PStandby="0.3">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallLogoStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="20">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.3">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffLogoStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="20">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="3.3">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+  <Modulkonfiguration Name="StanzenB" ID="601" Komponentenliste="011">
+    <NichtFunktionale_Parameter PStandby="0.3">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallLochStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="10">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="2.3">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffLochStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="10">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="1.3">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>   
+</Modul>

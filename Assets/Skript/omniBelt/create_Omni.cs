@@ -15,6 +15,8 @@ public class create_Omni : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private string Omniname;       //this moduls's name
     private int num = 0;           //count the number of modul
 
+    //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
     public void OnBeginDrag(PointerEventData data)
     {
         omni = Instantiate(Resources.Load("omniBelt")) as GameObject;      //clone Prefab from Folder "Resources"
@@ -64,6 +66,8 @@ public class create_Omni : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
             omni.GetComponent<MeshRenderer>().material.color = originalcolor;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("OLM", Collidername, ProductionModule.KeinModul, true); // Update the current Config
 
             omni.AddComponent<Drag_Omni>();
             omni.GetComponent<ConstructorClient_Omni>().enabled = true;

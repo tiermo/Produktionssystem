@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Modul Name="Modulname">
+  <Komponente Name="Komponentenname" ID="Komponentennummer">
+    <Installationsaufwände Zeit="Zeit in s" Kosten="Kosten in €">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="Zeit in s" Kosten="Kosten in €">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Modulkonfiguration Name="Konfigurationsname" ID="ModulID" Komponentenliste="1000000">
+    <NichtFunktionale_Parameter PStandby="Standbyleistung pro s">
+    </NichtFunktionale_Parameter>
+    <Service Name="Servicename">
+      <NichtFunktionale_Parameter Name="TService" Formel="gewünschte Formel">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="gewünschte Formel">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+</Modul>

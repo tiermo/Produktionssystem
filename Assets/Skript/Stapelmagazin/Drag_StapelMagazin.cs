@@ -36,6 +36,8 @@ public class Drag_StapelMagazin : MonoBehaviour
     private string localEulerAngles;     //in order to change the rotation of conveyor belt
     RaycastHit hit;
 
+   // private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
     private int serverPort;
     private ModulServerClient msc;
 
@@ -86,6 +88,9 @@ public class Drag_StapelMagazin : MonoBehaviour
         ObjScreenSpace = Camera.main.WorldToScreenPoint(trans.position);
         MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, ObjScreenSpace.z);
         Offset = trans.position - Camera.main.ScreenToWorldPoint(MouseScreenSpace);
+
+        GameObject.Find(previousCollidername);
+        ConfigManager.changeConfig("PM", previousCollidername, ProductionModule.KeinModul, true); // update the current Config
     }
 
     void OnMouseDrag()
@@ -183,6 +188,9 @@ public class Drag_StapelMagazin : MonoBehaviour
             previousposition = trans.position;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
             previousCollidername = Collidername;
+
+            ConfigManager.changeConfig("PM", previousCollidername, ProductionModule.ModulStapelMagazin, true); // Update the current Config
+
             if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
             {
                 x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
@@ -204,6 +212,8 @@ public class Drag_StapelMagazin : MonoBehaviour
         {
             trans.position = previousposition;
             GameObject.Find(previousCollidername).GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("PM", previousCollidername, ProductionModule.ModulStapelMagazin, true); // Update the current Config
         }
         GetComponent<MeshRenderer>().material.color = originalColor;
         isDrag = false;

@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Modul Name="StanzenPruefen">
+  <Komponente Name="Stanzkopf Logo" ID="1">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Stanzkopf Bohrloch" ID="2">
+    <Installationsaufwände Zeit="5" Kosten="1.25">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Optischer Sensor" ID="3">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="10" Kosten="2.5">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Ultraschall Sensor" ID="4">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Normal Stanzen" ID="5">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="0" Kosten="0">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Optisch" ID="6">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="0" Kosten="0">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Ultraschall" ID="7">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="0" Kosten="0">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Modulkonfiguration Name="StanzenPruefenA" ID="800" Komponentenliste="1010110">
+    <NichtFunktionale_Parameter PStandby="1">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallLogoStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="20">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.3">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffLogoStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="20">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="3.3">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="LochPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="3">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="2">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="FormPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="10">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="2">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+  <Modulkonfiguration Name="StanzenPruefenB" ID="801" Komponentenliste="1001101">
+    <NichtFunktionale_Parameter PStandby="1">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallLogoStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="20">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.3">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffLogoStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="20">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="3.3">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="LochPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="5">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="1.5">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="FormPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="15">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="1.5">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+  <Modulkonfiguration Name="StanzenPruefenC" ID="802" Komponentenliste="0110110">
+    <NichtFunktionale_Parameter PStandby="1">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallLochStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="10">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="3">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffLochStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="10">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="2">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="LochPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="3">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="2">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="FormPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="10">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="2">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+  <Modulkonfiguration Name="StanzenPruefenD" ID="803" Komponentenliste="0101101">
+    <NichtFunktionale_Parameter PStandby="1">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallLochStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="10">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="3">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffLochStanzen">
+      <NichtFunktionale_Parameter Name="TService" Formel="10">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="2">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="LochPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="5">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="1,5">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="FormPruefen">
+      <NichtFunktionale_Parameter Name="TService" Formel="15">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="1,5">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+</Modul>

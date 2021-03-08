@@ -20,6 +20,8 @@ public class Create_ConveyorBelt : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     private int num = 0; //the number of conveyorbelt
 
+    //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
+
     public void OnBeginDrag(PointerEventData data)
     {
         //conveyor=Instantiate(conveyor) as GameObject;  //clone the latest clone, will be clone more Skript when used AddComponent
@@ -108,6 +110,8 @@ public class Create_ConveyorBelt : MonoBehaviour, IBeginDragHandler, IDragHandle
             }
             conveyor.GetComponent<MeshRenderer>().material.color = originalcolor;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
+
+            ConfigManager.changeConfig("BLM", Collidername, ProductionModule.KeinModul, true); // Update the current Config
 
             conveyor.AddComponent<Drag_Conveyor>();
             conveyor.GetComponent<ConstrutorClient_ConveyorBelt>().enabled = true;

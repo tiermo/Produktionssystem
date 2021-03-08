@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Modul Name="Bohren">
+  <Komponente Name="Symmetrischer Bohrer 10 mm" ID="1">
+    <Installationsaufwände Zeit="5" Kosten="1.25">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Symmetrischer Bohrer 5 mm" ID="2">
+    <Installationsaufwände Zeit="5" Kosten="1.25">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Gewindebohrer" ID="3">
+    <Installationsaufwände Zeit="5" Kosten="1.25">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="5" Kosten="1.25">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Leistungsstarker Motor" ID="4">
+    <Installationsaufwände Zeit="20" Kosten="5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="10" Kosten="2.5">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Energiesparender Motor" ID="5">
+    <Installationsaufwände Zeit="20" Kosten="5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="10" Kosten="2.5">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Normales Bohren" ID="6">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="0" Kosten="0">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Komponente Name="Gewindebohren" ID="7">
+    <Installationsaufwände Zeit="10" Kosten="2.5">
+    </Installationsaufwände>
+    <Deinstallationsaufwände Zeit="0" Kosten="0">
+    </Deinstallationsaufwände>
+  </Komponente>
+  <Modulkonfiguration Name="BohrenA" ID="200" Komponentenliste="1001010">
+    <NichtFunktionale_Parameter PStandby="3">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallBohrenA">
+      <NichtFunktionale_Parameter Name="TService" Formel="(l*60/(0.1*n))+5">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.5+(n*0.00049)">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffBohrenA">
+      <NichtFunktionale_Parameter Name="TService" Formel="(l*60/(0.18*n))+5">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.5+(n*0.000122)">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+  <Modulkonfiguration Name="BohrenB" ID="201" Komponentenliste="0101010">
+    <NichtFunktionale_Parameter PStandby="3">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallBohrenB">
+      <NichtFunktionale_Parameter Name="TService" Formel="5+(l*60/(0.05*n))">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.5+(n*0.0000613)">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffBohrenB">
+      <NichtFunktionale_Parameter Name="TService" Formel="5+(l*60/(0.12*n))">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.5+(n*0.0000204)">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+  
+  
+  <Modulkonfiguration Name="BohrenC" ID="202" Komponentenliste="0011001">
+    <NichtFunktionale_Parameter PStandby="4,5">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallBohrenC">
+      <NichtFunktionale_Parameter Name="TService" Formel="5+(l*60/(0.33*n))">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.5+(0.0005*n)">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffBohrenC">
+      <NichtFunktionale_Parameter Name="TService" Formel="5+(1*60/(0.3*n))">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.5+(0.0000813*n)">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+  
+  <Modulkonfiguration Name="BohrenD" ID="203" Komponentenliste="1000110">
+    <NichtFunktionale_Parameter PStandby="1.5">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallBohrenD">
+      <NichtFunktionale_Parameter Name="TService" Formel="5+(l*60/(0.1*n))">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="2.25+(n*0.00049)">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffBohrenD">
+      <NichtFunktionale_Parameter Name="TService" Formel="5+(l*60/(0.18*n))">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="2.25+(n*0.000122)">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+
+  <Modulkonfiguration Name="BohrenE" ID="204" Komponentenliste="0100110">
+    <NichtFunktionale_Parameter PStandby="Standbyleistung pro s">
+    </NichtFunktionale_Parameter>
+    <Service Name="MetallBohrenE">
+      <NichtFunktionale_Parameter Name="TService" Formel="5+(l*60/(0.05*n))">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.5+(n*0.0000613)">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="KunststoffBohrenE">
+      <NichtFunktionale_Parameter Name="TService" Formel="5+(l*60/(0.05*n))">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.5+(n*0.0000204)">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+    
+</Modul>
