@@ -43,21 +43,34 @@ public class Drag_StapelMagazin : MonoBehaviour
 
     void Start()
     {
-        //get the name and position of gameobject
-        previousCollidername = GameObject.Find("StapelMagazin").GetComponent<Create_StapelMagazin>().SendColliderName();
-        if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+        if (ConfigManager.getStartCounter() == 8)
         {
+            previousCollidername = "Modul120";
             x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
             y = float.Parse(previousCollidername.Substring(7, 1));
-
+            Modulname = "StapelMagazin 1";
+            ConfigManager.setStartCounter();
         }
         else
         {
-            x = float.Parse(previousCollidername.Substring(5, 1));
-            y = float.Parse(previousCollidername.Substring(6, 1)) / float.Parse(previousCollidername.Substring(7, 1));
+            previousCollidername = GameObject.Find("StapelMagazin").GetComponent<Create_StapelMagazin>().SendColliderName();
+            if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+            {
+                x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
+                y = float.Parse(previousCollidername.Substring(7, 1));
+
+            }
+            else
+            {
+                x = float.Parse(previousCollidername.Substring(5, 1));
+                y = float.Parse(previousCollidername.Substring(6, 1)) / float.Parse(previousCollidername.Substring(7, 1));
+            }
+
+            Modulname = GameObject.Find("StapelMagazin").GetComponent<Create_StapelMagazin>().SendModulName();
         }
 
-        Modulname = GameObject.Find("StapelMagazin").GetComponent<Create_StapelMagazin>().SendModulName();
+        //get the name and position of gameobject
+        
         originalColor = GetComponent<MeshRenderer>().material.color;
 
         trans = GetComponent<Transform>();
@@ -222,7 +235,16 @@ public class Drag_StapelMagazin : MonoBehaviour
 
     public string SendInfo()
     {
-        Infostring = "%" + Modulname + "/" + x + "/" + y;
+        if (ConfigManager.getInfoCounter() == 8)
+        {
+            Infostring = "%" + "StapelMagazin 1"  + "/" + "0.5" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else
+        {
+            Infostring = "%" + Modulname + "/" + x + "/" + y;
+        }
+            
         Debug.Log(Infostring);
         return Infostring;
     }

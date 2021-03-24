@@ -72,7 +72,13 @@ public class tcpServer_Stanzen : MonoBehaviour
             int spaceposition = data.IndexOf(' ');
             speed = data.Substring(spaceposition + 1);
             GetComponent<StanzenSkript>().SpeedSelect(speed);
-        }else{
+        }
+        if (data.Contains("service"))
+        {
+            GetComponent<StanzenSkript>().forwardInformation(data);
+            
+        }
+        else {
             if (string.Compare(data, "up") == 0)
             {
                 GetComponent<StanzenSkript>().moveUp();

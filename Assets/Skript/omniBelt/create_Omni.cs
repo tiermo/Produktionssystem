@@ -13,7 +13,7 @@ public class create_Omni : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     RaycastHit hit;
     private string Collidername;   //the name of colider
     private string Omniname;       //this moduls's name
-    private int num = 0;           //count the number of modul
+    private int num = 3;           //count the number of modul
 
     //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
 
@@ -63,7 +63,7 @@ public class create_Omni : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             Vector3 _offset = new Vector3(0.2f, -0.55f, 0);
             omni.transform.position = hit.collider.transform.position - _offset;
-
+            Debug.Log(hit.collider.transform.position);
             omni.GetComponent<MeshRenderer>().material.color = originalcolor;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
 

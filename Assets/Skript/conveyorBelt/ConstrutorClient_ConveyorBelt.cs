@@ -34,6 +34,7 @@ public class ConstrutorClient_ConveyorBelt : MonoBehaviour {
         sensorEnd = transform.Find("sensorEnd").gameObject;
         data = GetComponent<Drag_Conveyor>().SendInfo();
         ConnectToServer();
+        Debug.Log(data);
         Send(data);
     }
 

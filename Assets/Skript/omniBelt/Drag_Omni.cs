@@ -39,17 +39,51 @@ public class Drag_Omni : MonoBehaviour
 
     void Start()
     {
-        //get the name and position of gameobject
-        previousCollidername = GameObject.Find("Button_OmniBelt").GetComponent<create_Omni>().SendColliderName();
-        x = int.Parse(previousCollidername.Substring(4, 1));
-        y = int.Parse(previousCollidername.Substring(5, 1));
-        Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
-
-        Omniname = GameObject.Find("Button_OmniBelt").GetComponent<create_Omni>().SendOmniName();
         originalColor = GetComponent<MeshRenderer>().material.color;
         trans = GetComponent<Transform>();
         previousposition = trans.position;
         mask = 1 << (LayerMask.NameToLayer("Omni"));
+        //get the name and position of gameobject
+        if (ConfigManager.getStartCounter() == 5)
+        {
+            previousCollidername = "Omni20";
+            x = int.Parse(previousCollidername.Substring(4, 1));
+            y = int.Parse(previousCollidername.Substring(5, 1));
+            Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
+
+            Omniname = "omniBelt 1";
+            ConfigManager.setStartCounter();
+        } else if (ConfigManager.getStartCounter() == 6)
+        {
+            previousCollidername = "Omni40";
+            x = int.Parse(previousCollidername.Substring(4, 1));
+            y = int.Parse(previousCollidername.Substring(5, 1));
+            Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
+
+            Omniname = "omniBelt 2";
+            ConfigManager.setStartCounter();
+        }
+        else if (ConfigManager.getStartCounter() == 7)
+        {
+            previousCollidername = "Omni60";
+            x = int.Parse(previousCollidername.Substring(4, 1));
+            y = int.Parse(previousCollidername.Substring(5, 1));
+            Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
+
+            Omniname = "omniBelt 3";
+            ConfigManager.setStartCounter();
+        }
+        else
+        {
+            previousCollidername = GameObject.Find("Button_OmniBelt").GetComponent<create_Omni>().SendColliderName();
+            x = int.Parse(previousCollidername.Substring(4, 1));
+            y = int.Parse(previousCollidername.Substring(5, 1));
+            Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
+
+            Omniname = GameObject.Find("Button_OmniBelt").GetComponent<create_Omni>().SendOmniName();
+        }
+       
+       
 
         serverPort = GetComponent<ConstructorClient_Omni>().getServerPortNr();
         Debug.Log("serverPost_omni" + serverPort);
@@ -152,7 +186,26 @@ public class Drag_Omni : MonoBehaviour
 
     public string SendInfo()
     {
-        Infostring = "%" + Omniname + "/" + x + "/" + y;
+        if (ConfigManager.getInfoCounter() == 5)
+        {
+            Infostring = "%" + "omniBelt " + "1" + "/" + "2" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else if (ConfigManager.getInfoCounter() == 6)
+        {
+            Infostring = "%" + "omniBelt " + "2" + "/" + "4" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else if (ConfigManager.getInfoCounter() == 7)
+        {
+            Infostring = "%" + "omniBelt " + "3" + "/" + "6" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else
+        {
+            Infostring = "%" + Omniname + "/" + x + "/" + y;
+        }
+            
         Debug.Log(Infostring);
         return Infostring;
     }

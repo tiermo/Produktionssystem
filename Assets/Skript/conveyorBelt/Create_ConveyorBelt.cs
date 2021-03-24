@@ -18,7 +18,7 @@ public class Create_ConveyorBelt : MonoBehaviour, IBeginDragHandler, IDragHandle
     private string Collidername; //the name of colider
     private string Conveyorname;
 
-    private int num = 0; //the number of conveyorbelt
+    private int num = 4; //the number of conveyorbelt
 
     //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
 
@@ -93,6 +93,7 @@ public class Create_ConveyorBelt : MonoBehaviour, IBeginDragHandler, IDragHandle
                     //Debug.Log("hit.collider.transform.position" + hit.collider.transform.position);
                     Vector3 _offset_row = new Vector3(0, -0.46f, 9.75f);
                     conveyor.transform.position = hit.collider.transform.position - _offset_row;
+                    Debug.Log(hit.collider.transform.position);
                     //Debug.Log("trans.position" + conveyor.transform.position);
                     //conveyor.GetComponent<ConveyorScript>().enabled = true;      //script for horizontal conveyor belt
                     //conveyor.GetComponent<ConveyorScript_Vertikal>().enabled = false; 
@@ -127,6 +128,7 @@ public class Create_ConveyorBelt : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     void Start(){
         mask = 1 << (LayerMask.NameToLayer("Plane"));
+        
     }
 
     void Update() {
@@ -161,4 +163,7 @@ public class Create_ConveyorBelt : MonoBehaviour, IBeginDragHandler, IDragHandle
     {
         return Conveyorname;
     }
+
+    
+
 }

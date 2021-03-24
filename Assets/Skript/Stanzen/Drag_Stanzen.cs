@@ -45,20 +45,38 @@ public class Drag_Stanzen : MonoBehaviour
     void Start()
     {
         //get the name and position of gameobject
-        previousCollidername = GameObject.Find("Stanzen").GetComponent<create_Stanzen>().SendColliderName();
-        if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+        if (ConfigManager.getStartCounter() == 11)
         {
-            x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
-            y = float.Parse(previousCollidername.Substring(7, 1));
+            previousCollidername = "Modul920";
+            x = (float)4.5;
+            y = (float)0.0;
+            Modulname = "Stanzen A 1";
 
         }
         else
         {
-            x = float.Parse(previousCollidername.Substring(5, 1));
-            y = float.Parse(previousCollidername.Substring(6, 1)) / float.Parse(previousCollidername.Substring(7, 1));
+            previousCollidername = GameObject.Find("Stanzen").GetComponent<create_Stanzen>().SendColliderName();
+            if (previousCollidername == "Modul720")
+            {
+                x = (float)7.0;
+                y = (float)0.0;
+            }
+            else if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+            {
+                x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
+                y = float.Parse(previousCollidername.Substring(7, 1));
+
+            }
+            else
+            {
+                x = float.Parse(previousCollidername.Substring(5, 1));
+                y = float.Parse(previousCollidername.Substring(6, 1)) / float.Parse(previousCollidername.Substring(7, 1));
+            }
+
+            Modulname = GameObject.Find("Stanzen").GetComponent<create_Stanzen>().SendModulName();
         }
 
-        Modulname = GameObject.Find("Stanzen").GetComponent<create_Stanzen>().SendModulName();
+        
         originalColor = GetComponent<MeshRenderer>().material.color;
 
         trans = GetComponent<Transform>();
@@ -198,7 +216,12 @@ public class Drag_Stanzen : MonoBehaviour
 
             ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true); // Update the current Config
 
-            if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+            if (previousCollidername == "Modul720")
+            {
+                x = (float)7.0;
+                y = (float)0.0;
+            }
+            else if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
             {
                 x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
                 y = float.Parse(previousCollidername.Substring(7, 1));
@@ -229,7 +252,16 @@ public class Drag_Stanzen : MonoBehaviour
 
     public string SendInfo()
     {
-        Infostring = "%" + Modulname + "/" + x + "/" + y;
+        if (ConfigManager.getInfoCounter() == 11)
+        {
+            Infostring = "%" + "Stanzen A 1" + "/" + "4.5" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else
+        {
+            Infostring = "%" + Modulname + "/" + x + "/" + y;
+        }
+        
         Debug.Log(Infostring);
         return Infostring;
     }

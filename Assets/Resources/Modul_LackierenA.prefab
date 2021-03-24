@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 33581642233841742}
   - component: {fileID: 23724326017246578}
   - component: {fileID: 64641649777674052}
-  - component: {fileID: 114163013322700218}
+  - component: {fileID: 114974954611763390}
+  - component: {fileID: 114427862888541210}
   m_Layer: 0
   m_Name: Modul_LackierenA
   m_TagString: Untagged
@@ -42,6 +43,8 @@ GameObject:
   - component: {fileID: 23973670811657900}
   - component: {fileID: 114756164780142660}
   - component: {fileID: 114047612396876866}
+  - component: {fileID: 114222675270199544}
+  - component: {fileID: 114964614073169644}
   m_Layer: 0
   m_Name: Sensoren
   m_TagString: Untagged
@@ -258,7 +261,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57895b6285744e4dba31d9b535cb004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114163013322700218
+--- !u!114 &114222675270199544
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1624508602837934}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53844e6df6c74a24288ff0bd8093e3af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114427862888541210
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,3 +295,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: 
+--- !u!114 &114964614073169644
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1624508602837934}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d419013aefdd4b4b8b67d5273ea0945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114974954611763390
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1214968309699842}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc628993a13d5c64f99358ffc897d7d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

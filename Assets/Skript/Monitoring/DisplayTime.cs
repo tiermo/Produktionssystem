@@ -15,7 +15,7 @@ public class DisplayTime : MonoBehaviour {
 
     public void displayTime(int time)
     {
-        timeText.text = "Zeit" + "\t" + "\t"+ "\t" + makeTimeLookNice(time) + "h";
+        timeText.text = "Zeit" + "\t" + "\t"  + makeTimeLookNice(time) + "h";
     }
 
     public void deleteTimeText()

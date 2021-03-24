@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 //Author: Sagar Nayak
 //Date: 26.10.2017
@@ -22,6 +23,9 @@ public class OmniConveyorControl : MonoBehaviour {
     private Rigidbody rigidbody;                            // access to collision objects
     private NavMeshSurface surface;                         // build nav mesh surface
     private float agentspeed;                               // adjust the speed of agent
+
+    private ConfigurationHelper configHelper = new ConfigurationHelper();
+    private ConvertTime timeConverter = new ConvertTime();
 
 
     // Use this for initialization
@@ -62,12 +66,13 @@ public class OmniConveyorControl : MonoBehaviour {
         {
             pos = transform.position;                                  // update position vector
             audio.Play();                                       // play audio
-            movement = new Vector3(0.0f, 2.03f, 15.0f);
+            movement = new Vector3(0.0f, 3.03f, 15.0f);
             pos += movement;                                    // add left location movement vector
             agent.speed = agentspeed;
             agent.destination = pos;                            // set destnation to move object to the lef
         }    
         GetComponent<tcpServer_Omni>().sendBackMessage("finished");
+        
     }
 
     public void moveRight(string speed){                              // function to move an object to the right
@@ -82,7 +87,8 @@ public class OmniConveyorControl : MonoBehaviour {
             agent.destination = pos;
         }
         GetComponent<tcpServer_Omni>().sendBackMessage("finished");
-	}
+        
+    }
 
 	public void moveUp (string speed) {                                 // function to move an object in upward direction
         OmniSpeedSelet(speed);
@@ -96,6 +102,7 @@ public class OmniConveyorControl : MonoBehaviour {
             agent.destination = pos;
         }
         GetComponent<tcpServer_Omni>().sendBackMessage("finished");
+        
     }
 
     public void moveDown(string speed){                               // function to move an object in downward direction
@@ -110,6 +117,7 @@ public class OmniConveyorControl : MonoBehaviour {
             agent.destination = pos;
         }     
         GetComponent<tcpServer_Omni>().sendBackMessage("finished");
+        
     }
 
     void OnCollisionEnter(Collision collision)              // called when object is on conveyor
@@ -153,6 +161,27 @@ public class OmniConveyorControl : MonoBehaviour {
     {
     	yield return new  WaitForSeconds(0.5f);
     	rigidbody.velocity = new Vector3(0f,0f,0f);         //set velocity to 0
-        rigidbody.useGravity = true;
+        rigidbody.useGravity = false;
+    }
+
+    public void forwardInformation(string data)
+    {
+        string[] nameSplit;
+        nameSplit = data.Split(" "[0]);
+        string message;
+
+        if (nameSplit[2] == "servicename")
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName("conveyorBelt"), configHelper.getServiceName("conveyorBelt"), "10", "4");
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName("conveyorBelt"), configHelper.getServiceName("conveyorBelt"), "10", "4"));
+
+        }
+        else
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName("conveyorBelt"), nameSplit[2], nameSplit[3], nameSplit[4]);
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName("conveyorBelt"), nameSplit[2], nameSplit[3], nameSplit[4]));
+        }
+        GetComponent<tcpServer_Omni>().sendBackMessage(message);
+
     }
 }

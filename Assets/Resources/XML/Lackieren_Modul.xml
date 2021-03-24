@@ -20,7 +20,7 @@
     </Deinstallationsaufwände>
   </Komponente>
   <Modulkonfiguration Name="LackierenA" ID="500" Komponentenliste="101">
-    <NichtFunktionale_Parameter PStandby="1">
+    <NichtFunktionale_Parameter PStandby="1.0">
     </NichtFunktionale_Parameter>
     <Service Name="LackierenSlow">
       <NichtFunktionale_Parameter Name="TService" Formel="45">
@@ -36,7 +36,7 @@
     </Service>
   </Modulkonfiguration>
   <Modulkonfiguration Name="LackierenB" ID="501" Komponentenliste="011">
-    <NichtFunktionale_Parameter PStandby="1">
+    <NichtFunktionale_Parameter PStandby="1.0">
     </NichtFunktionale_Parameter>
     <Service Name="LackierenSlow">
       <NichtFunktionale_Parameter Name="TService" Formel="45">

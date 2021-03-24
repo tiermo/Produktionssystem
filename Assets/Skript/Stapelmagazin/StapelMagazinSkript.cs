@@ -54,4 +54,10 @@ public class StapelMagazinSkript : MonoBehaviour
                 break;
         }
     } 
+
+    public void startMonitoring()
+    {
+        ConfigManager.setMonitoringStatus(true);
+        GetComponent<tcpServer_StapelMagazin>().sendBackMessage("finished");
+    }
 }

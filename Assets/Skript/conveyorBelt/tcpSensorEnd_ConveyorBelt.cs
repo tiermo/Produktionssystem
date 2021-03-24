@@ -75,7 +75,7 @@ public class tcpSensorEnd_ConveyorBelt : MonoBehaviour
 
     private void onIncoming(ServerClient client, string data)
     {   //process requests depending on string message received
-        Debug.Log("onincoming data end sensor " + data);
+
         if (string.Compare(data, "st") == 0)
         {
             GetComponent<sensorEnd_ConveyorBelt>().setMonitorFlag();

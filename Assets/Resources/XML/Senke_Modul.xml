@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Modul Name="Senke">
+  <Modulkonfiguration Name="Senke" ID="900" Komponentenliste=" ">
+    <NichtFunktionale_Parameter PStandby="0.0">
+    </NichtFunktionale_Parameter>
+    <Service Name="Entnehmen">
+      <NichtFunktionale_Parameter Name="TService" Formel="0">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="0">
+      </NichtFunktionale_Parameter>
+    </Service>
+    
+  </Modulkonfiguration>
+</Modul>

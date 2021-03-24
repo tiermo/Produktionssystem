@@ -44,22 +44,40 @@ public class Drag_Bohren : MonoBehaviour
     //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
 
     void Start()
-    {
-        //get the name and position of gameobject
-        previousCollidername = GameObject.Find("Bohren").GetComponent<Create_Bohren>().SendColliderName();
-        if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+    {//get the name and position of gameobject
+        if (ConfigManager.getStartCounter() == 10)
         {
-            x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
-            y = float.Parse(previousCollidername.Substring(7, 1));
+            previousCollidername = "Modul520";
+            x = (float)2.0;
+            y = (float)0.0;
+            Modulname = "Bohren A 1";
 
         }
         else
         {
-            x = float.Parse(previousCollidername.Substring(5, 1));
-            y = float.Parse(previousCollidername.Substring(6, 1)) / float.Parse(previousCollidername.Substring(7, 1));
-        }
+            previousCollidername = GameObject.Find("Bohren").GetComponent<Create_Bohren>().SendColliderName();
+            if (previousCollidername == "Modul720")
+            {
+                x = (float)7.0;
+                y = (float)0.0;
+            }
+            else if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+            {
+                x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
+                y = float.Parse(previousCollidername.Substring(7, 1));
 
-        Modulname = GameObject.Find("Bohren").GetComponent<Create_Bohren>().SendModulName();
+            }
+            else
+            {
+                x = float.Parse(previousCollidername.Substring(5, 1));
+                y = float.Parse(previousCollidername.Substring(6, 1)) / float.Parse(previousCollidername.Substring(7, 1));
+            }
+
+
+            Modulname = GameObject.Find("Bohren").GetComponent<Create_Bohren>().SendModulName();
+        }
+        
+        
         originalColor = GetComponent<MeshRenderer>().material.color;
         
 
@@ -199,13 +217,16 @@ public class Drag_Bohren : MonoBehaviour
             previousposition = trans.position;
             hit.collider.GetComponent<BoxCollider>().enabled = false;
             previousCollidername = Collidername;
+            Debug.Log("previousCollidername nach versetzten: " + previousCollidername);
 
-            Debug.Log("hallo");
-            Debug.Log(Modulname);
-            Debug.Log(getModulName(Modulname));
             ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true); // Update the current Config
 
-            if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+            if (previousCollidername == "Modul720")
+            {
+                x = (float)7.0;
+                y = (float)0.0;
+            }
+            else if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
             {
                 x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
                 y = float.Parse(previousCollidername.Substring(7, 1));
@@ -219,15 +240,15 @@ public class Drag_Bohren : MonoBehaviour
 
             Positionstring = "Position: x=" + x.ToString("0.0") + ", y=" + y.ToString("0.0");
             serverPort = GetComponent<ConstructorClient_Bohren>().getServerPortNr();
+            Debug.Log("hier sollte jetzt was falsches kommen:");
+            Debug.Log(serverPort);
+            Debug.Log(Positionstring);
             msc = new ModulServerClient(serverPort, Positionstring);
         }
         else
         {
             trans.position = previousposition;
             GameObject.Find(previousCollidername).GetComponent<BoxCollider>().enabled = false;
-            Debug.Log("hallo");
-            Debug.Log(Modulname);
-            Debug.Log(getModulName(Modulname));
             ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true);
         }
         GetComponent<MeshRenderer>().material.color = originalColor;
@@ -238,7 +259,16 @@ public class Drag_Bohren : MonoBehaviour
 
     public string SendInfo()
     {
-        Infostring = "%" + Modulname + "/" + x + "/" + y;
+        if (ConfigManager.getInfoCounter() == 10)
+        {
+            Infostring = "%" + "Bohren A 1" + "/" + "2.5" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else
+        {
+            Infostring = "%" + Modulname + "/" + x + "/" + y;
+        }
+        
         Debug.Log(Infostring);
         return Infostring;
     }

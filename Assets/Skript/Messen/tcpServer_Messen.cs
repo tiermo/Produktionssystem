@@ -75,6 +75,11 @@ public class tcpServer_Messen : MonoBehaviour
         {
             GetComponent<MessenScript>().setDistanceSensorActive();
         }
+        if (data.Contains("service"))
+        {
+            GetComponent<MessenScript>().forwardInformation(data);
+            
+        }
     }
 
     public void sendBackMessage(string data)

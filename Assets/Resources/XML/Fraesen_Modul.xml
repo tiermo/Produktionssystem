@@ -38,76 +38,76 @@
     </Deinstallationsaufwände>
   </Komponente>
   <Modulkonfiguration Name="FraesenA" ID="300" Komponentenliste="101010">
-    <NichtFunktionale_Parameter PStandby="5">
+    <NichtFunktionale_Parameter PStandby="5.0">
     </NichtFunktionale_Parameter>
     <Service Name="PlanfraesenMetall">
       <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.18*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.001726)">
+      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.0003452*a)">
       </NichtFunktionale_Parameter>
     </Service>
     <Service Name="PlanfraesenKunststoff">
       <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.48*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.0006031)">
+      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.00012062*a)">
       </NichtFunktionale_Parameter>
     </Service>
   </Modulkonfiguration>
   <Modulkonfiguration Name="FraesenB" ID="301" Komponentenliste="011001">
-    <NichtFunktionale_Parameter PStandby="5">
+    <NichtFunktionale_Parameter PStandby="5.0">
     </NichtFunktionale_Parameter>
     <Service Name="MuldeFraesenMetallB">
       <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.05*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.0002083)">
+      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.00004166*a)">
       </NichtFunktionale_Parameter>
     </Service>
     <Service Name="MuldeFraesenKunststoffB">
       <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.1*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.00006)">
+      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.000012*a)">
       </NichtFunktionale_Parameter>
     </Service>
     <Service Name="LogoFraesenMetallB">
       <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.05*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.0002083)">
+      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.00004166*a)">
       </NichtFunktionale_Parameter>
     </Service>
     <Service Name="LogoFraesenKunststoffB">
       <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.1*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.00006)">
+      <NichtFunktionale_Parameter Name="PService" Formel="7.5+(n*0.000012*a)">
       </NichtFunktionale_Parameter>
     </Service>
   </Modulkonfiguration>
   
   
   <Modulkonfiguration Name="FraesenC" ID="302" Komponentenliste="010101">
-    <NichtFunktionale_Parameter PStandby="2">
+    <NichtFunktionale_Parameter PStandby="2.0">
     </NichtFunktionale_Parameter>
     <Service Name="MuldeFraesenMetallC">
       <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.05*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="3+(n*0.0002083)">
+      <NichtFunktionale_Parameter Name="PService" Formel="3+(n*0.00004166*a)">
       </NichtFunktionale_Parameter>
     </Service>
     <Service Name="MuldeFraesenKunststoffC">
-      <NichtFunktionale_Parameter Name="TService" Formel="10+(1*60/(0.1*n))">
+      <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.1*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="3+(n*0.00006)">
+      <NichtFunktionale_Parameter Name="PService" Formel="3+(n*0.000012*a)">
       </NichtFunktionale_Parameter>
     </Service>
     <Service Name="LogoFraesenMetallC">
       <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.05*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="3+(n*0.0002083)">
+      <NichtFunktionale_Parameter Name="PService" Formel="3+(n*0.00004166*a)">
       </NichtFunktionale_Parameter>
     </Service>
     <Service Name="LogoFraesenKunststoffC">
-      <NichtFunktionale_Parameter Name="TService" Formel="10+(1*60/(0.1*n))">
+      <NichtFunktionale_Parameter Name="TService" Formel="10+(l*60/(0.1*n))">
       </NichtFunktionale_Parameter>
-      <NichtFunktionale_Parameter Name="PService" Formel="3+(n*0.00006)">
+      <NichtFunktionale_Parameter Name="PService" Formel="3+(n*0.000012*a)">
       </NichtFunktionale_Parameter>
     </Service>
   </Modulkonfiguration>    

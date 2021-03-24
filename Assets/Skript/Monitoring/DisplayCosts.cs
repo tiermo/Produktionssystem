@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
 public class DisplayCosts : MonoBehaviour {
 
     
@@ -17,7 +18,7 @@ public class DisplayCosts : MonoBehaviour {
 
     public void displayCosts(int costs)
     {
-      costsText.text = "Kosten" + "\t" + "\t" + costs + "€";   
+      costsText.text = "Kosten" + "\t"  + costs + "€";   
     }
 
     public void deleteCostsText()

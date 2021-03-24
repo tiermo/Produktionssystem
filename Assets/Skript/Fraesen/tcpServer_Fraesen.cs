@@ -69,7 +69,7 @@ public class tcpServer_Fraesen : MonoBehaviour
     private void onIncoming(ServerClient client, string data)
     {  //process requests depending on string message received
 
-        Debug.Log("data " + data);
+
         if (data.Contains("down"))
         {
             int spaceposition = data.IndexOf(' ');
@@ -154,6 +154,11 @@ public class tcpServer_Fraesen : MonoBehaviour
             data = GetComponent<FraesenSkript>().getMachineStatus().ToString();
             writer.WriteLine(data);
             writer.Flush();
+        }
+        if (data.Contains("service"))
+        {
+            GetComponent<FraesenSkript>().forwardInformation(data);
+            
         }
 
     }

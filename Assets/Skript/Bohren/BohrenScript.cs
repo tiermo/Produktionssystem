@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Threading;
 
 //Author: Sagar Nayak
 //Date: 26.10.2017
@@ -28,9 +30,14 @@ public class BohrenScript : MonoBehaviour
     private Vector3 contactedpos;                                       //arm position when drilling head contacted with workpiece
     private Vector3 sollpos;                                            //arm position of "needed depth"
     private int depth;                                                  //needed depth
+    private string modulname;
+
+    private ConfigurationHelper configHelper = new ConfigurationHelper();
+    private ConvertTime timeConverter = new ConvertTime();
 
     void Start()
-    {                                                     //called only at the beginning
+    {      
+        //called only at the beginning
         tr = GetComponent<Transform>();
         initialPosition = tr.position;
         arm = GetComponent<Rigidbody>();
@@ -38,6 +45,17 @@ public class BohrenScript : MonoBehaviour
         audio = GetComponent<AudioSource>();
         audio.Stop();
         upMovement = Vector3.Scale(downMovement, new Vector3(0.0f, -1.0f, 0.0f));
+
+        if (ConfigManager.getStartCounter() == 10)
+        {
+            modulname = "Bohren A 1";
+            ConfigManager.setStartCounter();
+        }
+        else
+        {
+            modulname = GameObject.Find("Bohren").GetComponent<Create_Bohren>().SendModulName();
+        }
+        
     }
 
     void Update()
@@ -83,7 +101,7 @@ public class BohrenScript : MonoBehaviour
 
         if (lowerLimitReached && DepthLimitFlag)
         {
-            Debug.Log("Extreme lowerLimitReached. Can not do fully drilling process for this workpiece");
+            //Debug.Log("Extreme lowerLimitReached. Can not do fully drilling process for this workpiece");
             GetComponent<tcpServer_Bohren>().sendBackMessage("wrong");
             DepthLimitFlag = false;
         }
@@ -96,7 +114,7 @@ public class BohrenScript : MonoBehaviour
                 GetComponent<tcpServer_Bohren>().LimitSwitchesReached("limitU");
                 upperLimitFlag = false;
             }
-            Debug.Log("upperLimitReached");
+            
         }
 
         if (armVerticalPosition < -1.5f)
@@ -132,6 +150,7 @@ public class BohrenScript : MonoBehaviour
     public void turnOff()
     {
         audio.Stop();
+
         GetComponent<tcpServer_Bohren>().sendBackMessage("finished");
     }
 
@@ -172,6 +191,7 @@ public class BohrenScript : MonoBehaviour
         machineOn = true;
         upperLimitReached = false;
         arm.position += movement;
+        
         GetComponent<tcpServer_Bohren>().sendBackMessage("finished");
     }
 
@@ -191,7 +211,7 @@ public class BohrenScript : MonoBehaviour
 
     public void SpeedSelect(string s)
     {
-        switch (s)
+        /*switch (s)
         { 
             case "low":
                 downMovement = new Vector3(0.0f, -0.01f,0.0f);
@@ -205,9 +225,13 @@ public class BohrenScript : MonoBehaviour
             default:
                 downMovement = new Vector3(0.0f, -0.03f, 0.0f);
                 break;
-        }
-        GetComponent<tcpServer_Bohren>().sendBackMessage("selected");
+        }*/
+
+        downMovement = new Vector3(0.0f, -0.06f, 0.0f);
+        GetComponent<tcpServer_Bohren>().sendBackMessage("selected");   
     }
+
+    
 
     public void OnTriggerEnter(Collider other) {
         if (other.gameObject.name.Contains("Cube"))
@@ -223,4 +247,25 @@ public class BohrenScript : MonoBehaviour
             Entered = false;
         }
     }
+
+    public void forwardInformation(string data)
+    {
+        string[] nameSplit;
+        nameSplit = data.Split(" "[0]);
+        string message;
+
+        if (nameSplit[2] == "servicename")
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname)));
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname))));
+        }
+        else
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4]);
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4]));
+        }
+        GetComponent<tcpServer_Bohren>().sendBackMessage(message);
+    }
+
+   
 }

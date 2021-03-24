@@ -44,7 +44,7 @@ public class Create_Pruefen : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         modul.GetComponent<MeshRenderer>().material.color = Color.yellow;
 
         num++;
-        modul.name = "Pruefen " + configurationName + " " + num.ToString();
+        modul.name = "Messen " + configurationName + " " + num.ToString();
         Modulname = modul.name;
     }
 

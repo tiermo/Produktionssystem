@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Modul Name="StapelMagazin">
+  <Modulkonfiguration Name="StapelMagazin" ID="100" Komponentenliste=" ">
+    <NichtFunktionale_Parameter PStandby="0.0">
+    </NichtFunktionale_Parameter>
+    <Service Name="">
+      <NichtFunktionale_Parameter Name="TService" Formel="(l*60/(0.1*n))+5">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="4.5+(n*0.00049)">
+      </NichtFunktionale_Parameter>
+    </Service>
+    <Service Name="">
+      <NichtFunktionale_Parameter Name="TService" Formel="">
+      </NichtFunktionale_Parameter>
+      <NichtFunktionale_Parameter Name="PService" Formel="">
+      </NichtFunktionale_Parameter>
+    </Service>
+  </Modulkonfiguration>
+</Modul>

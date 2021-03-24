@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using System;
 
 //Author: Sagar Nayak
 //Date: 26.10.2017
@@ -28,7 +29,12 @@ public class ConveyorScript : MonoBehaviour {
 
     private NavMeshSurface surface;
 
-	private bool isObjectOnConveyor = false;                // dont use anymore
+    
+    private ConfigurationHelper configHelper = new ConfigurationHelper();
+    private ConvertTime timeConverter = new ConvertTime();
+
+
+    private bool isObjectOnConveyor = false;                // dont use anymore
     //AudioSource audio;                                      // conveyor audio
 
 	// for initialization
@@ -40,7 +46,9 @@ public class ConveyorScript : MonoBehaviour {
 
         surface = transform.Find("NavMeshBaker").gameObject.GetComponent<NavMeshSurface>();
         surface.BuildNavMesh();
-	}
+
+        
+    }
 	
 	// called once per frame
 	void Update () {
@@ -63,6 +71,7 @@ public class ConveyorScript : MonoBehaviour {
 				// Remove the velocity component previously added.
 				foreach (Rigidbody rigidbody in listOfRigidbodiesOnConveyor) {
                     r.velocity -= conveyorVelocityVector;
+                    
 				}
 			}
 			//Adjust the velocity component
@@ -71,6 +80,7 @@ public class ConveyorScript : MonoBehaviour {
 				//Add the new velocity component 
 				foreach (Rigidbody rigidbody in listOfRigidbodiesOnConveyor) {
 					r.velocity += conveyorVelocityVector;
+                    
 				}
 			}
 			previousConveyorSpeed = conveyorSpeed;
@@ -81,17 +91,29 @@ public class ConveyorScript : MonoBehaviour {
 		Rigidbody rigidbody = collision.gameObject.GetComponent<Rigidbody>();
 		agent = collision.gameObject.GetComponent<NavMeshAgent>();
 		listOfRigidbodiesOnConveyor.Add (rigidbody);
-        Debug.Log("enter number" + listOfRigidbodiesOnConveyor.Count);
+       
         r = rigidbody;
         StartCoroutine(Delay());                                //delay to move object from omni-conveyor to conveyor using nav-mesh agent
     }
 
-	void OnCollisionExit(Collision collision) {                 //if object is not on conveyor anymore, remove it to listOfRigidbodiesOnConveyor
+	public void OnCollisionExit(Collision collision) {                 //if object is not on conveyor anymore, remove it to listOfRigidbodiesOnConveyor
         Rigidbody rigidbody = collision.gameObject.GetComponent<Rigidbody>();
-		r = rigidbody;
+        //listOfRigidbodiesOnConveyor.Remove(rigidbody);
+        r = rigidbody;
         StartCoroutine(Delay2());                               //delay to move object from conveyor to  omni-conveyor
-        Debug.Log("exit number" + listOfRigidbodiesOnConveyor.Count);
+       
     }
+
+   /* public void removeCube(GameObject cube)
+    {
+        Rigidbody rigidbody = cube.GetComponent<Rigidbody>();
+        //listOfRigidbodiesOnConveyor.Remove(rigidbody);
+        r = rigidbody;
+        r.useGravity = true;
+        listOfRigidbodiesOnConveyor.Remove(r);
+        isObjectOnConveyor = false;
+        Debug.Log("exit number" + listOfRigidbodiesOnConveyor.Count);
+    }*/
 
 	IEnumerator Delay()
 	{
@@ -119,8 +141,9 @@ public class ConveyorScript : MonoBehaviour {
 
 	public void ConveyorOff() {                                 //turn conveyor Off
 		conveyorOn = false;
-		//audio.Stop();
-	}
+        
+        //audio.Stop();
+    }
 
 	public bool getConveyorStatus() {                           //conveyor status: on or off                           
 		return conveyorOn;
@@ -138,7 +161,7 @@ public class ConveyorScript : MonoBehaviour {
     void ConveyorSpeedSelet(string speed)
     {
         switch (speed)
-        {
+        {   
             case "low":
                 conveyorDriveSpeed = 0.5f;
                 break;
@@ -149,8 +172,31 @@ public class ConveyorScript : MonoBehaviour {
                 conveyorDriveSpeed = 3;
                 break;
         }
+        
+        
     }
 	public bool getConveyorObjectSensorStatus() {               //is object on conveyor? return true, else false
         return isObjectOnConveyor;
 	}
+
+    public void forwardInformation(string data)
+    {
+        string[] nameSplit;
+        nameSplit = data.Split(" "[0]);
+        string message;
+
+        if (nameSplit[2] == "servicename")
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName("conveyorBelt"), configHelper.getServiceName("conveyorBelt"), "10", "4");
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName("conveyorBelt"), configHelper.getServiceName("conveyorBelt"), configHelper.getDrehzahl(configHelper.getServiceName("conveyorBelt")), configHelper.getLength(configHelper.getServiceName("conveyorBelt"))));
+
+        }
+        else
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName("conveyorBelt"), nameSplit[2], nameSplit[3], nameSplit[4]);
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName("conveyorBelt"), nameSplit[2], nameSplit[3], nameSplit[4]));
+
+        }
+        GetComponent<tcpServer_ConveyorBelt>().sendBackMessage(message);
+    }
 }

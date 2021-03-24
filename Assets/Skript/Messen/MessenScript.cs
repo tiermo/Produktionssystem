@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class MessenScript : MonoBehaviour {
     private int raylength = 10;
@@ -11,9 +12,14 @@ public class MessenScript : MonoBehaviour {
     private bool EnableModul = false;  //if enable this modul
     private Color originalColor;
 
+    private string modulname;
+    private ConfigurationHelper configHelper = new ConfigurationHelper();
+    private ConvertTime timeConverter = new ConvertTime();
+
     void Start()
     {
         originalColor = transform.parent.GetComponent<MeshRenderer>().material.color;
+        modulname = GameObject.Find("Pruefen").GetComponent<Create_Pruefen>().SendModulName();
     }
     
     void Update ()
@@ -54,6 +60,7 @@ public class MessenScript : MonoBehaviour {
     public void setDistanceSensorActive()
     {
         EnableModul = true;
+        
     }
 
     private void Delay()
@@ -62,5 +69,27 @@ public class MessenScript : MonoBehaviour {
         transform.parent.GetComponent<MeshRenderer>().material.color = originalColor;
         EnableModul = false;
         CancelInvoke("Delay");
+    }
+
+    public void forwardInformation(string data)
+    {
+        string[] nameSplit;
+        nameSplit = data.Split(" "[0]);
+        string message;
+
+        if (nameSplit[2] == "servicename")
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname)));
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname))));
+
+        }
+        else
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4] + " " + nameSplit[5]);
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4] + " " + nameSplit[5]));
+
+        }
+        GetComponent<tcpServer_Messen>().sendBackMessage(message);
+
     }
 }

@@ -16,6 +16,7 @@ public class tcpServer_Bohren : MonoBehaviour
 
     void Start()
     {
+        
         port = transform.parent.gameObject.GetComponent<ConstructorClient_Bohren>().getModulPortNr();
         if (port == 0)
         {
@@ -78,9 +79,18 @@ public class tcpServer_Bohren : MonoBehaviour
         }
         else if (data.Contains("speed"))
         {
-            int spaceposition = data.IndexOf(' ');
-            speed = data.Substring(spaceposition + 1);
-            GetComponent<BohrenScript>().SpeedSelect(speed);
+            string[] orderSplit;
+            orderSplit = data.Split(" "[0]);
+
+            //int spaceposition = data.IndexOf(' ');
+            //speed = data.Substring(spaceposition + 1);
+            GetComponent<BohrenScript>().SpeedSelect(orderSplit[1]);
+        }
+        
+        else if (data.Contains("service"))
+        {
+            GetComponent<BohrenScript>().forwardInformation(data);
+            
         }
         else
         {

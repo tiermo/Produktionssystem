@@ -26,7 +26,7 @@ public class ConstructorClient_Erkennen : MonoBehaviour
     void Start()
     {
         t = transform.Find("Sensoren").gameObject;
-        data = GetComponent<Drag_Lackieren>().SendInfo();
+        data = GetComponent<Drag_Erkennen>().SendInfo();
         ConnectToServer();
         Send(data);
     }

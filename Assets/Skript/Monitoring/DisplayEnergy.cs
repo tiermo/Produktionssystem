@@ -16,7 +16,7 @@ public class DisplayEnergy : MonoBehaviour {
     public void displayEnergy(int energy)
     {
         //energyText.text = energy + "kWh";
-        energyText.text = "Energie" + "\t" + "\t" + "kWh";
+        energyText.text = "Energie" + "\t" + "kWh";
     }
 
     public void deleteEnergyText()

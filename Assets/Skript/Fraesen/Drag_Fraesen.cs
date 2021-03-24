@@ -46,7 +46,12 @@ public class Drag_Fraesen : MonoBehaviour
     {
         //get the name and position of gameobject
         previousCollidername = GameObject.Find("Fraesen").GetComponent<Create_Fraesen>().SendColliderName();
-        if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+        if (previousCollidername == "Modul720")
+        {
+            x = (float)7.0;
+            y = (float)0.0;
+        }
+        else if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
         {
             x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
             y = float.Parse(previousCollidername.Substring(7, 1));
@@ -196,7 +201,12 @@ public class Drag_Fraesen : MonoBehaviour
             hit.collider.GetComponent<BoxCollider>().enabled = false;
             previousCollidername = Collidername;
             ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true); // Update the current Config
-            if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+            if (previousCollidername == "Modul720")
+            {
+                x = (float)7.0;
+                y = (float)0.0;
+            }
+            else if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
             {
                 x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
                 y = float.Parse(previousCollidername.Substring(7, 1));

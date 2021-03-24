@@ -127,6 +127,7 @@ public class Reconfiguration
 
         for (int i = 0; i < 13; i++)
         {
+           
             int d = (int)startModules[i] - (int)finalModules[i];
             if (d == 0)
             {
@@ -142,10 +143,10 @@ public class Reconfiguration
             }
             else if (d != 0 && -10 < d && d < 10)
             {
-                xmlReader.loadXml(getTypeOfModule(startModules[i]));          
+                xmlReader.loadXml(xmlReader.getTypeOfModule(startModules[i]));          
                 installTime += compareSingleModules(startModules[i], finalModules[i]);
             }
-            else if (d != 0 && d >= 10 && d <= -10)
+            else if (d != 0 && d >= 10 || d <= -10)
             {
                 addedPMs++;
                 removedPMs++;
@@ -154,8 +155,15 @@ public class Reconfiguration
         return installTime;
     }
 
+    /// <summary>
+    /// comnpares two modules and calculates the install time
+    /// </summary>
+    /// <param name="startModule"> enum of the module that was removed</param>
+    /// <param name="finalModule"> enum of the module that replaces the removed module</param>
+    /// <returns> install time in minutes</returns>
     private int compareSingleModules( ProductionModule startModule, ProductionModule finalModule)
     {
+       
         string componentList1 = xmlReader.getComponentList((int)startModule);
         string componentList2 = xmlReader.getComponentList((int)finalModule);
         return compareComponentLists(componentList1, componentList2);
@@ -187,45 +195,11 @@ public class Reconfiguration
         return installTime;
     }
 
-    private string getTypeOfModule(ProductionModule module)
-    {
-        if ((module == ProductionModule.ModulBohrenA) || (module == ProductionModule.ModulBohrenB) || 
-            (module == ProductionModule.ModulBohrenC) || (module == ProductionModule.ModulBohrenD) || 
-            (module == ProductionModule.ModulBohrenE) )
-        {
-            return "Bohren_Modul";
-        } else if (module == ProductionModule.ModulSenke)
-        {
-            return "";
-        } else if(module == ProductionModule.ModulStapelMagazin)
-        {
-            return "";
-        } else if(module == ProductionModule.ModulFraesenA || module == ProductionModule.ModulFraesenB || module == ProductionModule.ModulFraesenC)
-        {
-            return "Fraesen_Modul";
-        } else if(module == ProductionModule.ModulPruefenA || module == ProductionModule.ModulPruefenB)
-        {
-            return "Pruefen_Modul";
-        } else if (module == ProductionModule.ModulLackierenA || module == ProductionModule.ModulLackierenB)
-        {
-            return "Lackieren_Modul";
-        } else if (module == ProductionModule.ModulStanzenA || module == ProductionModule.ModulStanzenB || module == ProductionModule.ModulStanzenC)
-        {
-            return "Stanzen_Modul";
-        } else if (module == ProductionModule.ModulBohrenFraesenA || module == ProductionModule.ModulBohrenFraesenB )
-        {
-            return "BohrenFraesen_Modul";
-        }else if (module == ProductionModule.ModulStanzenPruefenA || module == ProductionModule.ModulStanzenPruefenB || module == ProductionModule.ModulStanzenPruefenC || module == ProductionModule.ModulStanzenPruefenD)
-        {
-            return "Stanzen_Pruefen_Modul";
-        }
-        else
-        {
-            return "Logistik_Modul";
-        }
-            
-    }
 
+    
+    /// <summary>
+    /// displays the time, costs and energy needed for the reconfiguration depending on the state of the assosiated toggle
+    /// </summary>
     private void displayValues()
     {
         DisplayTime displayTime = GameObject.Find("Zeit").GetComponent<DisplayTime>();
@@ -242,6 +216,7 @@ public class Reconfiguration
         }
         if (toggleCosts.getToggleValueCosts())
         {
+            calculateTime();
             displayCosts.displayCosts(calculateCosts());
         }
         else

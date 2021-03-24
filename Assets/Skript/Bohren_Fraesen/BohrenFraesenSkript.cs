@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BohrenFraesenSkript : MonoBehaviour
 {
@@ -39,6 +40,11 @@ public class BohrenFraesenSkript : MonoBehaviour
     private bool ChangeScale = false;
     private float distance;
 
+    private string modulname;
+
+    private ConfigurationHelper configHelper = new ConfigurationHelper();
+    private ConvertTime timeConverter = new ConvertTime();
+
 
     void Start()
     {                                                     //called only at the beginning
@@ -55,6 +61,8 @@ public class BohrenFraesenSkript : MonoBehaviour
         sollRightPos.x = arm.position.x;
         initalUpPos.y = arm.position.y;
         initalMiddlePos.x = arm.position.x;
+
+        modulname = GameObject.Find("Bohren/Fraesen").GetComponent<Create_Bohren_Fraesen>().SendModulName();
     }
 
     void Update()
@@ -260,12 +268,18 @@ public class BohrenFraesenSkript : MonoBehaviour
     public void turnOn()
     {                                               //function to turn drilling head
         audio.Play();
+
+        
+
         GetComponent<tcpServer_Bohren_Fraesen>().sendBackMessage("finished");
     }
 
     public void turnOff()
     {
         audio.Stop();
+
+        
+
         GetComponent<tcpServer_Bohren_Fraesen>().sendBackMessage("finished");
     }
 
@@ -345,6 +359,9 @@ public class BohrenFraesenSkript : MonoBehaviour
         movement = zeroMovement;
         arm.velocity = zeroMovement;
         machineOn = false;
+
+        
+
         GetComponent<tcpServer_Bohren_Fraesen>().sendBackMessage("finished");
     }
 
@@ -362,7 +379,7 @@ public class BohrenFraesenSkript : MonoBehaviour
 
     public void SpeedSelect(string s)
     {
-        switch (s)
+        /*switch (s)
         {
             case "low":
                 downMovement = new Vector3(0.0f, -0.01f, 0.0f);
@@ -380,7 +397,9 @@ public class BohrenFraesenSkript : MonoBehaviour
                 downMovement = new Vector3(0.0f, -0.03f, 0.0f);
                 leftMovement = new Vector3(0.04f, 0.0f, 0.0f);
                 break;
-        }
+        }*/
+        downMovement = new Vector3(0.0f, -0.06f, 0.0f);
+        leftMovement = new Vector3(0.07f, 0.0f, 0.0f);
         GetComponent<tcpServer_Bohren_Fraesen>().sendBackMessage("selected");
     }
 
@@ -414,4 +433,27 @@ public class BohrenFraesenSkript : MonoBehaviour
     {
         Entered = false;
     }
+
+    public void forwardInformation(string data)
+    {
+        string[] nameSplit;
+        nameSplit = data.Split(" "[0]);
+        string message; 
+        if (nameSplit[2] == "servicename")
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname)));
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname))));
+
+        }
+        else
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4]+ " " +nameSplit[5]);
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4] + " " + nameSplit[5]));
+
+        }
+        GetComponent<tcpServer_Bohren_Fraesen>().sendBackMessage(message);
+
+    }
+
+ 
 }

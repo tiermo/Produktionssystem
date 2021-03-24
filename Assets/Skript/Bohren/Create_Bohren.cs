@@ -20,12 +20,10 @@ public class Create_Bohren : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private string Collidername; //the name of colider
     private string Modulname;
 
-    private int num = 0; //the number of modul
+    private int num = 1; //the number of modul
 
     private Dropdown dropdown;
     private string configurationName;
-
-    //private ConfigManager ConfigManager = new ConfigManager();
 
     public void OnBeginDrag(PointerEventData data)
     {
@@ -131,6 +129,8 @@ public class Create_Bohren : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 case "(270.0, 0.0, 0.0)":
                     Vector3 _offset_row = new Vector3(10.85f, -7.72f, 1.56f);
                     modul.transform.position = hit.collider.transform.position - _offset_row;
+                    Debug.Log(hit.collider.transform.position);
+                    Debug.Log(hit.collider.name);
                     break;
                 case "(270.0, 270.0, 0.0)":
                     Vector3 _offset_column = new Vector3(-1.4f, -7.72f, 9.75f);

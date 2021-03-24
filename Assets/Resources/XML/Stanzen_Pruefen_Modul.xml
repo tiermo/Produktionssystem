@@ -44,7 +44,7 @@
     </Deinstallationsaufwände>
   </Komponente>
   <Modulkonfiguration Name="StanzenPruefenA" ID="800" Komponentenliste="1010110">
-    <NichtFunktionale_Parameter PStandby="1">
+    <NichtFunktionale_Parameter PStandby="1.0">
     </NichtFunktionale_Parameter>
     <Service Name="MetallLogoStanzen">
       <NichtFunktionale_Parameter Name="TService" Formel="20">
@@ -72,7 +72,7 @@
     </Service>
   </Modulkonfiguration>
   <Modulkonfiguration Name="StanzenPruefenB" ID="801" Komponentenliste="1001101">
-    <NichtFunktionale_Parameter PStandby="1">
+    <NichtFunktionale_Parameter PStandby="1.0">
     </NichtFunktionale_Parameter>
     <Service Name="MetallLogoStanzen">
       <NichtFunktionale_Parameter Name="TService" Formel="20">
@@ -100,7 +100,7 @@
     </Service>
   </Modulkonfiguration>
   <Modulkonfiguration Name="StanzenPruefenC" ID="802" Komponentenliste="0110110">
-    <NichtFunktionale_Parameter PStandby="1">
+    <NichtFunktionale_Parameter PStandby="1.0">
     </NichtFunktionale_Parameter>
     <Service Name="MetallLochStanzen">
       <NichtFunktionale_Parameter Name="TService" Formel="10">
@@ -128,7 +128,7 @@
     </Service>
   </Modulkonfiguration>
   <Modulkonfiguration Name="StanzenPruefenD" ID="803" Komponentenliste="0101101">
-    <NichtFunktionale_Parameter PStandby="1">
+    <NichtFunktionale_Parameter PStandby="1.0">
     </NichtFunktionale_Parameter>
     <Service Name="MetallLochStanzen">
       <NichtFunktionale_Parameter Name="TService" Formel="10">

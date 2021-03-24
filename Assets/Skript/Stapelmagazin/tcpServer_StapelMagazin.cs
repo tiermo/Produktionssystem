@@ -75,7 +75,7 @@ public class tcpServer_StapelMagazin : MonoBehaviour
 
     private void onIncoming(ServerClient client, string data)
     {  //process requests depending on string message received
-
+        
         spaceposition = data.IndexOf(' ');
         material = data.Substring(0, spaceposition);
         height = data.Substring(spaceposition + 1);
@@ -92,6 +92,11 @@ public class tcpServer_StapelMagazin : MonoBehaviour
         {
             GetComponent<StapelMagazinSkript>().CreateMetall(height);
         }
+        if (string.Compare(material, "start") == 0)
+        {
+            GetComponent<StapelMagazinSkript>().startMonitoring();
+        }
+
     }
 
     public void sendBackMessage(string data)

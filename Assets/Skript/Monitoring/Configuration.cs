@@ -8,6 +8,7 @@ using UnityEngine;
 public enum ProductionModule
 {
     KeinModul = 0,
+    ModulConveyorBelt = 50,
     ModulStapelMagazin = 100,
     ModulBohrenA = 200,
     ModulBohrenB= 201,
@@ -23,7 +24,6 @@ public enum ProductionModule
     ModulLackierenB = 501,
     ModulStanzenA = 600,
     ModulStanzenB = 601,
-    ModulStanzenC = 602,
     ModulBohrenFraesenA = 700,
     ModulBohrenFraesenB = 701,
     ModulStanzenPruefenA = 800,

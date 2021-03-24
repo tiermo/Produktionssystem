@@ -81,36 +81,45 @@ public class tcpServer_Omni : MonoBehaviour
     private void onIncoming(ServerClient client, string data)
     {  //process requests depending on string message received
 
-        Debug.Log("oncoming data " + data);
+
         if (string.Compare(data, "st") == 0)
         {
             GetComponent<OmniConveyorControl>().setMonitorFlag();
         }
+        
+        if (data.Contains("service"))
+        {
+            GetComponent<OmniConveyorControl>().forwardInformation(data);
+            
+        }
         else
         {
             spaceposition = data.IndexOf(' ');
-            direction = data.Substring(0, spaceposition);
-            speed = data.Substring(spaceposition + 1);
+            if (spaceposition >= 0)
+            {
+                direction = data.Substring(0, spaceposition);
+                speed = data.Substring(spaceposition + 1);
 
-            if (string.Compare(direction, "left") == 0)
-            {
-                GetComponent<OmniConveyorControl>().moveLeft(speed);
-                //sendBackMessage("finish");
-            }
-            if (string.Compare(direction, "right") == 0)
-            {
-                GetComponent<OmniConveyorControl>().moveRight(speed);
-                //sendBackMessage("finish");
-            }
-            if (string.Compare(direction, "up") == 0)
-            {
-                GetComponent<OmniConveyorControl>().moveUp(speed);
-                //sendBackMessage("finish");
-            }
-            if (string.Compare(direction, "down") == 0)
-            {
-                GetComponent<OmniConveyorControl>().moveDown(speed);
-                //sendBackMessage("finish");
+                if (string.Compare(direction, "left") == 0)
+                {
+                    GetComponent<OmniConveyorControl>().moveLeft(speed);
+                    //sendBackMessage("finish");
+                }
+                if (string.Compare(direction, "right") == 0)
+                {
+                    GetComponent<OmniConveyorControl>().moveRight(speed);
+                    //sendBackMessage("finish");
+                }
+                if (string.Compare(direction, "up") == 0)
+                {
+                    GetComponent<OmniConveyorControl>().moveUp(speed);
+                    //sendBackMessage("finish");
+                }
+                if (string.Compare(direction, "down") == 0)
+                {
+                    GetComponent<OmniConveyorControl>().moveDown(speed);
+                    //sendBackMessage("finish");
+                }
             }
         }
     }

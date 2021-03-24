@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class FraesenSkript : MonoBehaviour
 {
@@ -39,6 +40,10 @@ public class FraesenSkript : MonoBehaviour
     private bool ChangeScale = false;
     private float distance;
 
+    private string modulname;
+    private ConfigurationHelper configHelper = new ConfigurationHelper();
+    private ConvertTime timeConverter = new ConvertTime();
+
 
     void Start()
     {                                                     //called only at the beginning
@@ -55,6 +60,8 @@ public class FraesenSkript : MonoBehaviour
         sollRightPos.x = arm.position.x;
         initalUpPos.y = arm.position.y;
         initalMiddlePos.x = arm.position.x;
+
+        modulname = GameObject.Find("Fraesen").GetComponent<Create_Fraesen>().SendModulName();
     }
 
     void Update()
@@ -266,6 +273,9 @@ public class FraesenSkript : MonoBehaviour
     public void turnOff()
     {
         audio.Stop();
+
+       
+
         GetComponent<tcpServer_Fraesen>().sendBackMessage("finished");
     }
 
@@ -362,7 +372,7 @@ public class FraesenSkript : MonoBehaviour
 
     public void SpeedSelect(string s)
     {
-        switch (s)
+        /*switch (s)
         {
             case "low":
                 downMovement = new Vector3(0.0f, -0.01f, 0.0f);
@@ -380,15 +390,19 @@ public class FraesenSkript : MonoBehaviour
                 downMovement = new Vector3(0.0f, -0.03f, 0.0f);
                 leftMovement = new Vector3(0.04f, 0.0f, 0.0f);
                 break;
-        }
+        }*/
+        downMovement = new Vector3(0.0f, -0.03f, 0.0f);
+        leftMovement = new Vector3(0.04f, 0.0f, 0.0f);
         GetComponent<tcpServer_Fraesen>().sendBackMessage("selected");
+
+        
     }
 
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Contains("Cube"))
         {
-            Debug.Log("enter");
+
             Entered = true;
             xScale=other.gameObject.transform.localScale.x;        
         }  
@@ -414,4 +428,82 @@ public class FraesenSkript : MonoBehaviour
     {
         Entered = false;
     }
+
+    public void forwardInformation(string data)
+    {
+        string[] nameSplit;
+        nameSplit = data.Split(" "[0]);
+        string message;
+
+        if (nameSplit[2] == "servicename")
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname)));
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname))));
+
+        }
+        else
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4] + " " + nameSplit[5]);
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4] + " " + nameSplit[5]));
+
+        }
+        GetComponent<tcpServer_Fraesen>().sendBackMessage(message);
+    }
+
+    /*private ProductionModule getModulName(string modulName)
+    {
+        string[] nameSplit;
+        nameSplit = modulName.Split(" "[0]);
+
+        if (nameSplit[1] == "A")
+        {
+            return ProductionModule.ModulFraesenA;
+        }
+        else if (nameSplit[1] == "B")
+        {
+            return ProductionModule.ModulFraesenB;
+        }
+        else 
+        {
+            return ProductionModule.ModulFraesenC;
+        }
+       
+    }
+
+    private string getServiceName(string modulName)
+    {
+        string[] nameSplit;
+        nameSplit = modulName.Split(" "[0]);
+
+        if (nameSplit[1] == "A")
+        {
+            return "PlanfraesenMetall";
+        }
+        else if (nameSplit[1] == "B")
+        {
+            return "MuldeFraesenMetallB";
+        }
+        else
+        {
+            return "MuldeFraesenMetallC";
+        }
+    }
+
+    private int getDrehzahl(string serviceName)
+    {
+
+
+        if (serviceName == "PlanfraesenMetall")
+        {
+            return 2400;
+        }
+        else if (serviceName == "MuldeFraesenMetallB")
+        {
+            return 2400;
+        }
+        else
+        {
+            return 1200;
+        }
+    }*/
 }

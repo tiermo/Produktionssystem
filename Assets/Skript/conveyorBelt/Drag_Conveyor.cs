@@ -42,6 +42,7 @@ public class Drag_Conveyor : MonoBehaviour
     private ModulServerClient msc;
 
     private GameObject t;
+   
 
     void Start()
     {
@@ -51,21 +52,57 @@ public class Drag_Conveyor : MonoBehaviour
         mask = 1 << (LayerMask.NameToLayer("Plane"));
 
         //get the name and position of gameobject
-        /*if (GameObject.Find("Button_ConveyorBelt")==null)
+        if (ConfigManager.getStartCounter() == 1)
         {
-            Debug.Log("null");
-            //previousCollidername=GetComponent<
-            getInfo();
-            Debug.Log("finish");
+            previousCollidername = "Conveyor10";
+            x = int.Parse(previousCollidername.Substring(8, 1));
+            y = int.Parse(previousCollidername.Substring(9, 1));
+            Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
+            Conveyorname = "conveyorBelt 1";
+            
+            ConfigManager.setStartCounter();
+        }
+        else if (ConfigManager.getStartCounter() == 2)
+        {
+            previousCollidername = "Conveyor30";
+            x = int.Parse(previousCollidername.Substring(8, 1));
+            y = int.Parse(previousCollidername.Substring(9, 1));
+            Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
+            Conveyorname = "conveyorBelt 2";
+            
+            ConfigManager.setStartCounter();
+        }
+        else if (ConfigManager.getStartCounter() == 3)
+        {
+            previousCollidername = "Conveyor50";
+            x = int.Parse(previousCollidername.Substring(8, 1));
+            y = int.Parse(previousCollidername.Substring(9, 1));
+            Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
+            Conveyorname = "conveyorBelt 3";
+            
+            
+            ConfigManager.setStartCounter();
+        }
+        else if (ConfigManager.getStartCounter() == 4)
+        {
+            previousCollidername = "Conveyor70";
+            x = int.Parse(previousCollidername.Substring(8, 1));
+            y = int.Parse(previousCollidername.Substring(9, 1));
+            Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
+            Conveyorname = "conveyorBelt 4";
+           
+           
+            ConfigManager.setStartCounter();
         }
         else
-        {*/
+        {
             previousCollidername = GameObject.Find("Button_ConveyorBelt").GetComponent<Create_ConveyorBelt>().SendColliderName();
             x = int.Parse(previousCollidername.Substring(8, 1));
             y = int.Parse(previousCollidername.Substring(9, 1));
             Positionstring = "Position: x=" + x.ToString() + ", y=" + y.ToString();
             Conveyorname = GameObject.Find("Button_ConveyorBelt").GetComponent<Create_ConveyorBelt>().SendConveyorName();
-        //}
+            
+        }
     }
 
     void OnMouseEnter()
@@ -222,7 +259,31 @@ public class Drag_Conveyor : MonoBehaviour
     }
 
     public string SendInfo() {
-        Infostring = "%"+Conveyorname + "/"+ x + "/" + y;
+        if (ConfigManager.getInfoCounter() == 1)
+        {
+            Infostring = "%" + "conveyorBelt " + ConfigManager.getInfoCounter() + "/" + "1" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else if(ConfigManager.getInfoCounter() == 2)
+        {
+            Infostring = "%" + "conveyorBelt " + ConfigManager.getInfoCounter() + "/" + "3" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else if (ConfigManager.getInfoCounter() == 3)
+        {
+            Infostring = "%" + "conveyorBelt " + ConfigManager.getInfoCounter() + "/" + "5" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else if (ConfigManager.getInfoCounter() == 4)
+        {
+            Infostring = "%" + "conveyorBelt " + ConfigManager.getInfoCounter() + "/" + "7" + "/" + "0";
+            ConfigManager.setInfoCounter();
+        }
+        else
+        {
+            Infostring = "%" + Conveyorname + "/" + x + "/" + y;
+        }
+        
         Debug.Log(Infostring);
         return Infostring;
     }

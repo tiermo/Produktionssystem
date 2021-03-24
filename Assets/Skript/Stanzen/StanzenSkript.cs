@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class StanzenSkript : MonoBehaviour
 {
@@ -16,22 +17,37 @@ public class StanzenSkript : MonoBehaviour
     private bool upperLimitFlag = false;                                //flag to control sending back acknowledgement on reaching upper limit
     private bool lowerLimitReached = false;                             //lower limit reached indicator
     public float speed;
+
+    private string modulname;
+    private ConfigurationHelper configHelper = new ConfigurationHelper();
+    private ConvertTime timeConverter = new ConvertTime();
     
     void Start()
     {                                                     //called only at the beginning
         tr = GetComponent<Transform>();
         initialPosition = tr.position;
         arm = GetComponent<Rigidbody>();
-        arm.freezeRotation = true;                                      //avoid rotation of the drilling head
+        arm.freezeRotation = true;     //avoid rotation of the drilling head
+
+        if (ConfigManager.getStartCounter() == 11)
+        {
+            modulname = "Stanzen A 1";
+            ConfigManager.setStartCounter();
+        }
+        else
+        {
+            modulname = GameObject.Find("Stanzen").GetComponent<create_Stanzen>().SendModulName();
+        }
+        
     }
 
     void Update()
     {                                                    //called once in every frame
         float armVerticalPosition = initialPosition.y - arm.position.y;
-        Debug.Log("initialpositiony"+initialPosition.y+"armVerticalPosition" + armVerticalPosition);
+
         upMovement = Vector3.Scale(downMovement, new Vector3(0.0f, -1.0f, 0.0f));
 
-        if (armVerticalPosition > 4.5f)
+        if (armVerticalPosition > 2.5f)
         {                               //check if lower limit is reached
             lowerLimitReached = true;
             if (lowerLimitFlag)
@@ -39,12 +55,12 @@ public class StanzenSkript : MonoBehaviour
                 GetComponent<tcpServer_Stanzen>().LimitSwitchesReached("limitD");   //send acknowledgement from tcpDrilling class
                 lowerLimitFlag = false;
             }
-            Debug.Log("lowerLimitReached");
+           
         }
 
-        if (armVerticalPosition > 5f)
+        if (armVerticalPosition > 3f)
         {
-            Debug.Log("Extreme lowerLimitReached. Machine stopped movement");
+            
             stopVerticalMovement();                                      //stop movement on reaching extreme limit
         }
 
@@ -56,12 +72,12 @@ public class StanzenSkript : MonoBehaviour
                 GetComponent<tcpServer_Stanzen>().LimitSwitchesReached("limitU");
                 upperLimitFlag = false;
             }
-            Debug.Log("upperLimitReached");
+           
         }
 
         if (armVerticalPosition < -1f)
         {
-            Debug.Log("Extreme upperLimitReached. Machine stopped movement");
+            
             stopVerticalMovement();                                     //stop movement on reaching extreme limit
         }
 
@@ -117,6 +133,7 @@ public class StanzenSkript : MonoBehaviour
         arm.velocity = zeroMovement;
         machineOn = false;
         GetComponent<tcpServer_Stanzen>().sendBackMessage("finished");
+       
     }
 
     public void stopVerticalMovement()
@@ -139,6 +156,7 @@ public class StanzenSkript : MonoBehaviour
 
     public void SpeedSelect(string s)
     {
+        /*
         switch (s)
         {
             case "low":
@@ -157,7 +175,30 @@ public class StanzenSkript : MonoBehaviour
                 downMovement = new Vector3(0.0f, -0.03f, 0.0f);
                 speed = 0.2f;
                 break;
-        }
+        }*/
+        downMovement = new Vector3(0.0f, -0.03f, 0.0f);
+        speed = 0.2f;
         GetComponent<tcpServer_Stanzen>().sendBackMessage("selected");
+    }
+
+    public void forwardInformation(string data)
+    {
+        string[] nameSplit;
+        nameSplit = data.Split(" "[0]);
+        string message;
+
+        if (nameSplit[2] == "servicename")
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), "0", "0");
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), configHelper.getServiceName(modulname),"0","0"));
+
+        }
+        else
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), nameSplit[2], "0", "0");
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), nameSplit[2], "0", "0"));
+
+        }
+        GetComponent<tcpServer_Stanzen>().sendBackMessage(message);
     }
 }

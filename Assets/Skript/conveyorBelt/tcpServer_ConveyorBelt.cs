@@ -86,6 +86,13 @@ public class tcpServer_ConveyorBelt : MonoBehaviour {
             sendBackMessage("finished");
             spaceposition = 0;
         }
+       
+        
+        if (data.Contains("service"))
+        {
+            GetComponent<ConveyorScript>().forwardInformation(data);
+            
+        }
         else if (string.Compare(data, "st") == 0)
         {
             StreamWriter writer = new StreamWriter(client.tcp.GetStream(), Encoding.ASCII);
@@ -95,22 +102,28 @@ public class tcpServer_ConveyorBelt : MonoBehaviour {
         }
         else
         {
+            
             spaceposition = data.IndexOf(' ');
-            direction = data.Substring(0, spaceposition);
-            speed = data.Substring(spaceposition + 1);
+            if (spaceposition >= 0)
+            {
+                direction = data.Substring(0, spaceposition);
+                speed = data.Substring(spaceposition + 1);
 
-            if (string.Compare(direction, "forw") == 0)
-            {
-                GetComponent<ConveyorScript>().ConveyorOn();
-                GetComponent<ConveyorScript>().setConveyorDirectionDownRight(speed);
-                sendBackMessage("finished");
+                if (string.Compare(direction, "forw") == 0)
+                {
+                    GetComponent<ConveyorScript>().ConveyorOn();
+                    GetComponent<ConveyorScript>().setConveyorDirectionDownRight(speed);
+                    sendBackMessage("finished");
+                }
+                if (string.Compare(direction, "backw") == 0)
+                {
+                    GetComponent<ConveyorScript>().ConveyorOn();
+                    GetComponent<ConveyorScript>().setConveyorDirectionUpLeft(speed);
+                    sendBackMessage("finished");
+                }
             }
-            if (string.Compare(direction, "backw") == 0)
-            {
-                GetComponent<ConveyorScript>().ConveyorOn();
-                GetComponent<ConveyorScript>().setConveyorDirectionUpLeft(speed);
-                sendBackMessage("finished");              
-            }
+            
+            
         }
 	}
 

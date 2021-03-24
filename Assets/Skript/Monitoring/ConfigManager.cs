@@ -12,6 +12,8 @@ public static class ConfigManager  {
     private static Production production = new Production();
     private static Reconfiguration reconfiguration = new Reconfiguration();
     private static Configuration configToChange = new Configuration();
+    private static int startCounter = 1;
+    private static int infoCounter = 1;
 
 	
     /// <summary>
@@ -76,7 +78,7 @@ public static class ConfigManager  {
         {
            
             reconfiguration.endReconfiguration(configToPush);
-            //production.startMonitoring(configToPush);
+            production.startMonitoring(configToPush);
         }
     }
 
@@ -95,7 +97,7 @@ public static class ConfigManager  {
             string[] modulePosition = { "Modul120", "Modul212", "Modul252", "Modul520",
                                         "Modul522", "Modul524", "Modul412", "Modul452",
                                         "Modul920", "Modul922", "Modul924", "Modul612",
-                                        "Modul652", "Modul122" };
+                                        "Modul652", "Modul720" };
             realPosition = Array.IndexOf(modulePosition, position); // gets the Number of the Position the given "position" has in the Array
         }
         else if (nameOfFunction == "BLM")
@@ -103,7 +105,7 @@ public static class ConfigManager  {
             string[] BLMPosition = { "Conveyor10", "Conveyor21", "Conveyor23", "Conveyor30",
                                      "Conveyor32", "Conveyor34", "Conveyor41", "Conveyor43",
                                      "Conveyor50", "Conveyor52", "Conveyor54", "Conveyor61",
-                                     "Conveyor63", "Conveyor12" };
+                                     "Conveyor63", "Conveyor70" };
             realPosition = Array.IndexOf(BLMPosition, position);
         }
         else if (nameOfFunction == "OLM")
@@ -116,5 +118,41 @@ public static class ConfigManager  {
         return realPosition;
     }
 
+    /// <summary>
+    /// hands the values over to the method changeActiveModule of production
+    /// </summary>
+    /// <param name="moduleStatus"></param>
+    /// <param name="activeModule"></param>
+    /// <param name="serviceName"></param>
+    /// <param name="n"></param>
+    /// <param name="l"></param>
+    public static void changeActiveModule(string moduleStatus, ProductionModule activeModule, string serviceName, string n , string l)
+    {
+       production.changeActiveModule(Convert.ToBoolean(moduleStatus), activeModule, serviceName, n, l);
+    }
 
+    public static void setMonitoringStatus(bool status)
+    {
+        production.setMonitoringStatus(true);
+    }
+
+    public static int getStartCounter()
+    {
+        return startCounter;
+    }
+
+    public static void setStartCounter()
+    {
+        startCounter++;
+    }
+
+    public static int getInfoCounter()
+    {
+        return infoCounter;
+    }
+
+    public static void setInfoCounter()
+    {
+        infoCounter++;
+    }
 }

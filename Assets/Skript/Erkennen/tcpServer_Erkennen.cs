@@ -74,6 +74,11 @@ public class tcpServer_Erkennen : MonoBehaviour
         {
             GetComponent<ErkennenScript>().setSensorActive();
         }
+        if (data.Contains("service"))
+        {
+            GetComponent<ErkennenScript>().forwardInformation(data);
+           
+        }
     }
 
     public void sendBackMessage(string data)

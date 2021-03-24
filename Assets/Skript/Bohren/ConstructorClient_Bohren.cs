@@ -26,7 +26,10 @@ public class ConstructorClient_Bohren : MonoBehaviour
     void Start()
     {
         t = transform.Find("Arm").gameObject;
+        Debug.Log(t);
+        Debug.Log(t.GetComponent<tcpServer_Bohren>().gameObject);
         data = GetComponent<Drag_Bohren>().SendInfo();
+        Debug.Log(GetComponent<Drag_Bohren>().SendInfo());
         ConnectToServer();
         Send(data);
     }

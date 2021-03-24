@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class StanzenSkript_SM : MonoBehaviour
 {
@@ -16,6 +17,10 @@ public class StanzenSkript_SM : MonoBehaviour
     private bool upperLimitFlag = false;                                //flag to control sending back acknowledgement on reaching upper limit
     private bool lowerLimitReached = false;                             //lower limit reached indicator
     private float speed;
+
+    private string modulname;
+    private ConfigurationHelper configHelper = new ConfigurationHelper();
+    private ConvertTime timeConverter = new ConvertTime();
     
     void Start()
     {                                                     //called only at the beginning
@@ -23,6 +28,7 @@ public class StanzenSkript_SM : MonoBehaviour
         initialPosition = tr.position;
         arm = GetComponent<Rigidbody>();
         arm.freezeRotation = true;                                      //avoid rotation of the drilling head
+        modulname = GameObject.Find("Stanzen/Pruefen").GetComponent<create_StanzenPruefen>().SendModulName();
     }
 
     void Update()
@@ -158,5 +164,26 @@ public class StanzenSkript_SM : MonoBehaviour
                 break;
         }
         GetComponent<tcpServer_Stanzen_SM>().sendBackMessage("selected");
+    }
+
+    public void forwardInformation(string data)
+    {
+        string[] nameSplit;
+        nameSplit = data.Split(" "[0]);
+        string message;
+
+        if (nameSplit[2] == "servicename")
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname)));
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), configHelper.getServiceName(modulname), configHelper.getDrehzahl(configHelper.getServiceName(modulname)), configHelper.getLength(configHelper.getServiceName(modulname))));
+
+        }
+        else
+        {
+            ConfigManager.changeActiveModule(nameSplit[1], configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4] + " " + nameSplit[5]);
+            message = Convert.ToString(timeConverter.calculateTimeDifference(configHelper.getModuleName(modulname), nameSplit[2], nameSplit[3], nameSplit[4] + " " + nameSplit[5]));
+
+        }
+        GetComponent<tcpServer_Stanzen_SM>().sendBackMessage(message);
     }
 }

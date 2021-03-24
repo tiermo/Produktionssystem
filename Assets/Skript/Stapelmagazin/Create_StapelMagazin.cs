@@ -18,7 +18,7 @@ public class Create_StapelMagazin : MonoBehaviour, IBeginDragHandler, IDragHandl
     private string Collidername; //the name of colider
     private string Modulname;
 
-    private int num = 0; //the number of modul
+    private int num = 1; //the number of modul
 
     //private ConfigManager ConfigManager = new ConfigManager(); // so the Config can be updated
 
@@ -90,6 +90,7 @@ public class Create_StapelMagazin : MonoBehaviour, IBeginDragHandler, IDragHandl
                 case "(270.0, 0.0, 0.0)":
                     Vector3 _offset_row = new Vector3(9.52f, -7.78f, 0.01f);
                     modul.transform.position = hit.collider.transform.position - _offset_row;
+                    Debug.Log(hit.collider.transform.position);
                     break;
                 case "(270.0, 270.0, 0.0)":
                     Vector3 _offset_column = new Vector3(0.18f, -7.78f, 9.42f);

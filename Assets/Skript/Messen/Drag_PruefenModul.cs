@@ -44,7 +44,12 @@ public class Drag_PruefenModul : MonoBehaviour {
     {
         //get the name and position of gameobject
         previousCollidername = GameObject.Find("Pruefen").GetComponent<Create_Pruefen>().SendColliderName();
-        if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+        if (previousCollidername == "Modul720")
+        {
+            x = (float)7.0;
+            y = (float)0.0;
+        }
+        else if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
         {
             x = float.Parse(previousCollidername.Substring(5, 1))/float.Parse(previousCollidername.Substring(6, 1));
             y = float.Parse(previousCollidername.Substring(7, 1));
@@ -56,7 +61,7 @@ public class Drag_PruefenModul : MonoBehaviour {
             y = float.Parse(previousCollidername.Substring(6, 1))/float.Parse(previousCollidername.Substring(7, 1));        
         }
 
-        Modulname = GameObject.Find("Messen").GetComponent<Create_Pruefen>().SendModulName();
+        Modulname = GameObject.Find("Pruefen").GetComponent<Create_Pruefen>().SendModulName();
         originalColor = GetComponent<MeshRenderer>().material.color;
 
         trans = GetComponent<Transform>();
@@ -186,7 +191,12 @@ public class Drag_PruefenModul : MonoBehaviour {
 
             ConfigManager.changeConfig("PM", previousCollidername, getModulName(Modulname), true); // Update the current Config
 
-            if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
+            if (previousCollidername == "Modul720")
+            {
+                x = (float)7.0;
+                y = (float)0.0;
+            }
+            else if (int.Parse(previousCollidername.Substring(6, 1)) % 2 == 0)
             {
                 x = float.Parse(previousCollidername.Substring(5, 1)) / float.Parse(previousCollidername.Substring(6, 1));
                 y = float.Parse(previousCollidername.Substring(7, 1));

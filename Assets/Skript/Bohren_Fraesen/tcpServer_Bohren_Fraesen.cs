@@ -155,6 +155,11 @@ public class tcpServer_Bohren_Fraesen : MonoBehaviour
             writer.WriteLine(data);
             writer.Flush();
         }
+        if (data.Contains("service"))
+        {
+            GetComponent<BohrenFraesenSkript>().forwardInformation(data);
+            
+        }
 
     }
 
